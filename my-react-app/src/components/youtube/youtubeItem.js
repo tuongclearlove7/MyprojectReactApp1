@@ -2,8 +2,6 @@ import React from "react";
 
 function YoutubeItem(props){
 
-    console.log(props);
-
     return(
         <div className='youtube-item'>
             <h1 className="youtube-title">

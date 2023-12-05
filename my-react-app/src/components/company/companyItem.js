@@ -5,19 +5,22 @@ import axios from "axios";
 
 function CompanyItem() {
 
+    //state
     const [companys, setCompanys] = useState([]);
 
     useEffect(() => {
+
         axios.get("https://web-chat.up.railway.app/company-api")
+
             .then(response => {
+
                 setCompanys(response.data);
             })
             .catch(err => {
+
                 console.log(err);
             });
     }, []);
-
-    console.log(companys);
 
     return (
         <table>
@@ -38,7 +41,6 @@ function CompanyItem() {
                     );
                 })
             }
-
             </thead>
             <tbody>
                 {companys.map((item, index) => (
