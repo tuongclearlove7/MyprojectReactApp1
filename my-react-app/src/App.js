@@ -5,27 +5,55 @@ import CompanyItem from "./components/company/companyItem";
 import YoutubeItem from "./components/youtube/youtubeItem";
 import Toggle from "./components/state/toggle";
 import View from "./components/view/view";
+import Chat from "./components/chat/chat";
 import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+
+const socket = io.connect("https://web-chat.up.railway.app/");
 
 function App() {
 
-    let desc = `React is a free and open-source front-end JavaScript library 
-                for building user interfaces based on components. 
-                It is maintained by Meta and a community of individual 
-                developers and companies. React can be used to develop single-page, 
-                mobile, or server-rendered applications with frameworks like Next.js.`;
-    let image = `https://www.sevenstarwebsolutions.com/wp-content/uploads/2017/12/reactbanner.jpg`;
-    const name = "Tuongclearlove7";
+    const [username, setUsername] = useState("");
+    const [room, setRoom] = useState("");
+    const [showChat, setShowChat] = useState(false);
+
+
+    const joinRoom = function () {
+
+        if(username !== "" && room !== ""){
+
+            socket.emit("join_room", room);
+            setShowChat(true);
+        }
+    }
 
     return (
-        <div className="container">
-            <View image={image} title="Learning ReactJs" description={desc}>
-                <Toggle>
-                    <span>{name}</span>
-                </Toggle>
-            </View>
-            <div className="distance-table-top"></div>
-            <CompanyItem></CompanyItem>
+        <div className="App">
+            {!showChat ? (
+            <div className="joinChatContainer">
+                <h3>Join A chat</h3>
+                <input type="text"
+                       placeholder="join..."
+                       onChange={function(event){
+                           setUsername(event.target.value);
+                       }}
+                />
+                <input type="text"
+                       placeholder="room..."
+                       onChange={function(event){
+                           setRoom(event.target.value);
+                       }}
+                />
+                <button onClick={joinRoom}>Join A room</button>
+
+            </div>
+            ) : (
+            <Chat
+                socket={socket}
+                username={username}
+                room={room}
+            />
+            )}
         </div>
     );
 }
