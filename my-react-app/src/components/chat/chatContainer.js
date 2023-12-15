@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Chat from "./chat";
 import io from 'socket.io-client';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { roomNameData } from "../../model/roomNameData";
 import { ToastContainer, toast } from 'react-toastify';
-import RenderEffect from "../../feature/renderEffect";
 import 'react-toastify/dist/ReactToastify.css';
-const socket = io.connect("https://web-chat.up.railway.app/");
-
-// const socket = io.connect("http://localhost:8000/");
-
+import RenderEffect from "../../feature/renderEffect";
+import Swal from "sweetalert2";
 // component
 function ChatContainer(props) {
+
 
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
     const navigate = useNavigate();
-    const notify = () => toast.error('Vui lòng nhập vào tên của bạn và chọn phòng!', {
+    const socketRef = useRef(props.socket);
+    const notify = (text) => toast.error(text, {
 
         position: "top-center",
         autoClose: 5000,
@@ -28,27 +27,92 @@ function ChatContainer(props) {
         theme: "light",
 
     });
+    const notifyWelcome = () => toast.info(`Xin chào, chào mừng bạn đến với trang chủ của WEB-CHAT.\nChúc bạn có trải nghiệm tốt nhất với website của tôi`, {
 
+        position: "top-center",
+        autoClose: 900,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+
+    });
 
     useEffect(() => {
 
-        console.log(props.title);
+        notifyWelcome();
         document.title = props.title;
 
     }, [props.title]);
+
+    useEffect(() => {
+
+        const handleUser = function (data) {
+
+            console.log(data);
+        };
+
+        socketRef.current.on(process.env.REACT_APP_JOIN_ROOM, handleUser);
+
+        return () => {
+
+            socketRef.current.off(process.env.REACT_APP_JOIN_ROOM, handleUser);
+        };
+    }, []);
+
+
 
     const text = RenderEffect("Hãy nhập tên và chọn phòng!");
 
     const joinRoom = function () {
 
-        if (username !== "" && room !== "") {
+        const invalid = /[@.!#$%^&*()_+=[\]{};'`:"\\|,<>/?]/;
+        const space = 2;
+        const spaceLimited = new RegExp(`\\s{${space},}`);
+        const characters = username.split('');
+        const num_char_limited = 16;
 
-            socket.emit("join_room", room);
-            props.setShowChat(true);
+        if (!username || !room) {
 
-        }else{
+            notify('Vui lòng nhập vào tên của bạn và chọn phòng!');
 
-            notify();
+        } else if (invalid.test(username) || invalid.test(room)) {
+
+            notify('Vui lòng nhập không nhập vào ký tự!');
+
+        } else if (spaceLimited.test(username) || spaceLimited.test(room)) {
+
+            notify(`Vui lòng nhập vào tên không được phép cách quá ${space-1} khoảng trắng!`);
+
+        } else {
+
+            if (characters.length > num_char_limited) {
+
+                notify(`Vui lòng nhập vào tên dưới ${num_char_limited} ký tự!`);
+
+            } else {
+
+                if(room === "Chọn phòng"){
+
+                    notify('Vui lòng nhập chọn phòng!');
+
+                }else{
+
+                    if(username === " "){
+
+                        notify('Vui lòng nhập vào!');
+
+                    }else {
+
+                        props.socket.emit(process.env.REACT_APP_JOIN_ROOM, {room, username});
+                        props.setU(username);
+                        props.setR(room);
+                        props.setShowChat(true);
+                    }
+                }
+            }
         }
     }
 
@@ -90,7 +154,7 @@ function ChatContainer(props) {
             ) : (
                 <div className="chat-container">
                     <Chat
-                        socket={socket}
+                        socket={props.socket}
                         username={username}
                         room={room}
                         onLeaveRoom={leaveRoom}

@@ -1,18 +1,20 @@
 import React from "react";
+import { ToastContainer, toast } from 'react-toastify';
 import {Link, useNavigate} from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
-
 
 // Component
 function Header(props) {
 
     const navigate = useNavigate();
+    const sizeIcon = "25px";
+    const r_m = props.r;
+    const u_m = props.u;
 
     const leaveRoom = () => {
 
         props.setShowChat(false);
     };
-    const sizeIcon = "25px";
 
     return (
         <div className="header">
@@ -23,7 +25,7 @@ function Header(props) {
                         <a style={{fontSize:sizeIcon}} className="fa fa-facebook" href={"https://www.facebook.com/Ytttuong1"}></a>
                         <a style={{fontSize:sizeIcon}} className="fa fa-linkedin" href={`https://www.linkedin.com/in/tuong-tran-the-391688293/`}></a>
                         <a style={{fontSize:sizeIcon}} className="fa fa-instagram" href={``}></a>
-                         <b>FOLLOW ME</b>
+                         <b>Theo dõi tôi</b>
                     </li>
                 </span>
             </div>
@@ -52,13 +54,32 @@ function Header(props) {
                                 <a className="nav-link" href={"/"} onClick={leaveRoom} >TRANG CHỦ</a>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="company">CÔNG TY</Link>
+                                <Link className="nav-link" onClick={()=>{
+
+                                    props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                }} to="company">CÔNG TY</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="chat">NHẮN TIN</Link>
+                                <Link className="nav-link" onClick={()=>{
+
+                                    props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                }} to="chat">NHẮN TIN</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="blog">BÀI VIẾT</Link>
+                                <Link className="nav-link" onClick={()=>{
+
+                                    props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                }} to="blog">BÀI VIẾT</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" onClick={()=>{
+
+                                    props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                }} to="contact">LIÊN HỆ</Link>
                             </li>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,16 +87,26 @@ function Header(props) {
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li>
-                                        <Link className="dropdown-item" to={"chat"}>NHẮN TIN</Link>
+                                        <Link className="dropdown-item" onClick={()=>{
+
+                                            props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                        }} to={"chat"}>NHẮN TIN</Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={"company"}>CÔNG TY</Link>
+                                        <Link className="dropdown-item" onClick={()=>{
+
+                                            props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                        }} to={"company"}>CÔNG TY</Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={"blog"}>BÀI VIẾT</Link>
+                                        <Link className="dropdown-item" onClick={()=>{
+
+                                            props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
+
+                                        }} to={"blog"}>BÀI VIẾT</Link>
                                     </li>
-
-
                                 </ul>
                             </li>
 
@@ -94,6 +125,7 @@ function Header(props) {
                     </div>
                 </div>
             </nav>
+            <ToastContainer />
         </div>
     );
 }

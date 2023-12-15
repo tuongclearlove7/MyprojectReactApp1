@@ -39,6 +39,12 @@
     color: #00D000FF;
 }
 
+.contact-container{
+
+    padding-top: 50px;
+    padding-left: 10px;
+}
+
 .list-item{
 
     display: grid;
@@ -422,4 +428,23 @@ body {
 }
 .hide {
     opacity: 0 !important;
+}
+
+.post-item-blog{
+
+    color: midnightblue;
+    padding-left: 0px;
+    font-size: 15px;
+}
+
+#user{
+
+    text-align: center;
+}
+
+.list-user ul{
+
+    padding-left: 0px;
+    text-align: center;
+    font-size: 12px;
 }

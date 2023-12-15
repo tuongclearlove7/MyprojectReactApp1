@@ -1,40 +1,55 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import YoutubeItem from "./youtubeItem";
+import axios from "axios";
 
 function Blog(props){
 
+    const [blogs, setBlogs] = useState([]);
     const bannerImg = "https://www.sevenstarwebsolutions.com/wp-content/uploads/2017/12/reactbanner.jpg";
     const author = "TuongClearlove7.";
     const title = ``;
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}blog-api?access_key=${process.env.REACT_APP_ACCESS_KEY}`;
+
     useEffect(() => {
 
-        console.log(props.title);
         document.title = props.title;
 
     }, [props.title]);
 
+    useEffect(() => {
+
+        axios.get(hostname)
+
+            .then(response => {
+
+                setBlogs(response.data);
+            })
+            .catch(err => {
+
+                console.log(err);
+            });
+    }, []);
+
 
     return(
         <div className={"blog-container"}>
-            <YoutubeItem title1={`Học `}
-                         title2={`ReactJS `}
-                         title3={author}
-                         colorLan={"#26C6DA"}
-                         image={bannerImg}
-                         author={author}
-                         content={"React là một thư viện JavaScript front-end mã nguồn mở và miễn phí để xây dựng giao diện người dùng dựa trên các thành phần UI riêng lẻ. Nó được phát triển và duy trì bởi Meta và cộng đồng các nhà phát triển và công ty cá nhân."}
-                         slug={`https://react.dev/`}
-            />
-            <YoutubeItem title1={`Học `}
-                         title2={`NodeJS `}
-                         title3={author}
-                         colorLan={"black"}
-                         image={"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png"}
-                         author={author}
-                         content={"Node.js là một hệ thống phần mềm được thiết kế để viết các ứng dụng internet có khả năng mở rộng, đặc biệt là máy chủ web. Chương trình được viết bằng JavaScript, sử dụng kỹ thuật điều khiển theo sự kiện, nhập/xuất không đồng bộ để tối thiểu tổng chi phí và tối đa khả năng mở rộng."}
-                         slug={`https://nodejs.org/en`}
-            />
-
+            {
+                blogs.map((item, index) => {
+                    return(
+                        <div key={index}>
+                            <YoutubeItem title1={item.title || "Không tìm thấy dữ liệu"}
+                                         colorLan={"#26C6DA" || "Không tìm thấy dữ liệu"}
+                                         image={item.image || "Không tìm thấy dữ liệu"}
+                                         author={item.author || "Không tìm thấy dữ liệu"}
+                                         content={item.content || "Không tìm thấy dữ liệu"}
+                                         slug={`https://react.dev/` || "Không tìm thấy dữ liệu"}
+                                         index={(index+1) || "Không tìm thấy dữ liệu"}
+                                         createdAT={item.createdAt || "Không tìm thấy dữ liệu"}
+                            />
+                        </div>
+                    );
+                })
+            }
         </div>
     );
 }

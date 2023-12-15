@@ -1,7 +1,7 @@
 .toggle{
 
     width: 50px;
-    height: 15px;
+    height: 25px;
     background-color: #ccc;
     padding: 5px;
     border-radius: 100rem;
@@ -12,7 +12,7 @@
 
 .toggle.active{
 
-    background-color: #FF9800;
+    background-color: #43a047;
     /*display: none;*/
 
 }
@@ -29,12 +29,12 @@
 
 .spinner.active{
 
-    transform: translateX(35px);
+    transform: translateX(25px);
 }
 
 .toggle-control{
 
-    margin: -10px 0px 20px 12px;
+    margin: -10px 0 20px 12px;
     align-items: center;
     display: flex;
     gap: 0 10px;

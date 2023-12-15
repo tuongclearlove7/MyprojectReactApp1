@@ -8,12 +8,11 @@ function YoutubeItem(props){
             <h1 className="youtube-title">
                 <span>{RenderEffect(props.title1)||null}</span>
                 <span style={{color:props.colorLan}}>
-                    <a style={{color:props.colorLan, textDecoration:"none"}} href={props.slug}>
-                        {RenderEffect(props.title2) || null}
-                    </a>
                 </span>
-                <span>{RenderEffect("cùng ")}</span>
-                <span>{RenderEffect(props.title3) || null}</span>
+                <br/>
+                <span className={"post-item-blog"} id={"post-item-blog" + props.index}>
+                    Post {props.index} created at {props.createdAT}
+                </span>
             </h1>
             <div className="youtube-item">
                 <img width={"100%"} src={props.image} alt=""/>

@@ -8,14 +8,16 @@ function CompanyItem(props) {
 
     //state
     const [companys, setCompanys] = useState([]);
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}company-api?access_key=${process.env.REACT_APP_ACCESS_KEY}`;
 
     useEffect(() => {
+
         document.title = props.title;
     }, []);
 
     useEffect(() => {
 
-        axios.get("https://web-chat.up.railway.app/company-api")
+        axios.get(hostname)
 
             .then(response => {
 
@@ -54,13 +56,13 @@ function CompanyItem(props) {
                 <tbody>
                 {companys.map((item, index) => (
                     <tr key={index}>
-                        <td>{item.ten_cong_ty || null}</td>
-                        <td>{item.linh_vuc || null}</td>
-                        <td>{item.sdt || null}</td>
-                        <td>{item.email || null}</td>
-                        <td>{item.dia_chi || null}</td>
-                        <td>{item.vi_tri_tuyendung || null}</td>
-                        <td>{item.luong || null}</td>
+                        <td>{item.ten_cong_ty || "Không tìm thấy dữ liệu"}</td>
+                        <td>{item.linh_vuc || "Không tìm thấy dữ liệu"}</td>
+                        <td>{item.sdt || "Không tìm thấy dữ liệu"}</td>
+                        <td>{item.email || "Không tìm thấy dữ liệu"}</td>
+                        <td>{item.dia_chi || "Không tìm thấy dữ liệu"}</td>
+                        <td>{item.vi_tri_tuyendung || "Không tìm thấy dữ liệu"}</td>
+                        <td>{item.luong || "Không tìm thấy dữ liệu"}</td>
                     </tr>
                 ))}
                 </tbody>

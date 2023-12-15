@@ -1,3 +1,3 @@
 export const roomNameData=[
-    "Javascript","Python","ReactJs", "Ruby","Java"
+    "NodeJS","Python","ReactJs", "Ruby","Java"
 ];
