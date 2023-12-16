@@ -6,7 +6,7 @@ function YoutubeItem(props){
     return(
         <div >
             <h1 className="youtube-title">
-                <span>{RenderEffect(props.title1)||null}</span>
+                <span>{RenderEffect(props.title)||null}</span>
                 <span style={{color:props.colorLan}}>
                 </span>
                 <br/>
@@ -22,7 +22,7 @@ function YoutubeItem(props){
                     <h4 className="youtube-author">
                         {props.author || "author not passed in."}
                     </h4>
-                    <p style={{width: "70%"}}>{props.content || "content not passed in"}</p>
+                    <p style={{width: "100%"}}>{props.content || "content not passed in"}</p>
                 </div>
             </div>
         </div>

@@ -105,40 +105,39 @@ function Contact(props){
 
     return (
         <div className={"contact-container"}>
-            <div className={`title-send-mail`}>
-                <h2>Liên hệ tôi</h2>
+            <div className={"contact-me"}>
+                <div className={`title-send-mail`}>
+                    <h2>Liên hệ tôi</h2>
+                </div>
+                <StyledContactForm>
+                    <form ref={form} onSubmit={sendEmail}>
+                        <label>Tên</label>
+                        <input type="text"
+                               name="user_name"
+                               placeholder={"Nhập vào tên của bạn..."}
+                               onChange={(event) => {
+
+                                   setUser_name(event.target.value);
+                               }}/>
+                        <label>Email</label>
+                        <input type="email"
+                               name="user_email"
+                               placeholder={"Nhập vào Email của bạn..."}
+                               onChange={(event) => {
+
+                                   setEmail(event.target.value);
+                               }}/>
+                        <label>Lời nhắn</label>
+                        <textarea name="message"
+                                  placeholder={"Nhập vào nội dung tin nhắn..."}
+                                  onChange={(event) => {
+
+                                      setMsgEmail(event.target.value);
+                                  }}/>
+                        <input type="submit" value="Gửi" />
+                    </form>
+                </StyledContactForm>
             </div>
-            <StyledContactForm>
-                <form ref={form} onSubmit={sendEmail}>
-                    <label>Tên</label>
-                    <input type="text"
-                           name="user_name"
-                           placeholder={"Nhập vào tên của bạn..."}
-                           onChange={(event) => {
-
-                               setUser_name(event.target.value);
-                           }}
-                    />
-                    <label>Email</label>
-                    <input type="email"
-                           name="user_email"
-                           placeholder={"Nhập vào Email của bạn..."}
-                           onChange={(event) => {
-
-                               setEmail(event.target.value);
-                           }}
-                    />
-                    <label>Lời nhắn</label>
-                    <textarea name="message"
-                              placeholder={"Nhập vào nội dung tin nhắn..."}
-                              onChange={(event) => {
-
-                                  setMsgEmail(event.target.value);
-                              }}
-                    />
-                    <input type="submit" value="Gửi" />
-                </form>
-            </StyledContactForm>
         </div>
     );
 };
@@ -146,7 +145,7 @@ function Contact(props){
 export default Contact;
 
 const StyledContactForm = styled.div`
-  width: 400px;
+  width: 100%;
 
   form {
     display: flex;
