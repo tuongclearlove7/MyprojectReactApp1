@@ -6,19 +6,23 @@ import ChatContainer from "./chatContainer";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
+import {Reconnect} from "../../feature/reconntect";
 
-function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}){
 
-    console.log(socket.id);
+function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}){
+
     const [currentMsg, setCurrentMsg] = useState("");
     const [userList, setUserList] = useState([]);
     const [messageList, setMessageList] = useState([]);
+    const [userJoinRoomList, setUserJoinRoomList] = useState([]);
+    const [userLeaveRoomList, setUserLeaveRoomList] = useState([]);
     const navigate = useNavigate();
     const socketRef = useRef(socket);
-    const notify = () => toast.success(`Xin chào, chào mừng ${username} đến với phòng ${room}`, {
+
+    const notify = (text, time) => toast.success(text, {
 
         position: "top-center",
-        autoClose: 2000,
+        autoClose: time,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -28,13 +32,16 @@ function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}
 
     });
 
-    const leaveRoom = () => {
+    const leaveRoom = async () => {
 
         socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room, username });
         navigate('/');
-        onLeaveRoom();
+        setShowChat(false);
         setRoom("");
         setUsername("");
+        socket.disconnect();
+        await Reconnect(socket);
+
     };
 
     useEffect(() => {
@@ -43,6 +50,27 @@ function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}
         document.title = title;
 
     }, [title]);
+
+    useEffect(() => {
+
+        socketRef.current = socket;
+
+    }, [socket]);
+
+    useEffect(() => {
+
+        const handleUserJoin = function (data) {
+
+            setUserJoinRoomList((list) => [...list, data]);
+        };
+
+        socketRef.current.on("user_join_room", handleUserJoin);
+
+        return () => {
+
+            socketRef.current.off("user_join_room", handleUserJoin);
+        };
+    }, []);
 
     useEffect(() => {
 
@@ -65,27 +93,25 @@ function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}
 
         }else{
 
-            leaveRoom();
+            leaveRoom().then(r => {
+
+                console.log(r);
+
+            }).catch(error=>{
+
+                console.log(error)
+            });
         }
     }, []);
 
     useEffect(() => {
 
-        console.log("Effect is running!");
-
         socket.on(process.env.REACT_APP_ROOM_USERS, (data) => {
 
-            setUserList(data.users);
+            setUserList(data.users)
         });
     }, []);
 
-
-
-    useEffect(() => {
-
-        socketRef.current = socket;
-
-    }, [socket]);
 
     useEffect(() => {
 
@@ -106,9 +132,10 @@ function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}
 
     useEffect(() => {
 
-        socket.on(process.env.REACT_APP_USER_LEFT_ROOM, ({ username, room }) => {
+        socket.on(process.env.REACT_APP_USER_LEFT_ROOM, (data) => {
 
-            console.log(`${username} đã rời phòng ${room}`);
+            setUserLeaveRoomList((list) => [...list, data]);
+
         });
 
         return () => {
@@ -130,14 +157,11 @@ function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}
                ":" +   new Date(Date.now()).getMinutes(),
             }
 
-            console.log(messageData);
-
             await socket.emit(process.env.REACT_APP_SEND_MESSAGE, messageData);
             setMessageList((list)=> [...list, messageData])
             setCurrentMsg("");
         }
     }
-
 
     return (
 
@@ -167,49 +191,62 @@ function Chat({socket, username, room, onLeaveRoom, title, setRoom, setUsername}
                                     {userList.length > 0 ? (
                                         userList.map((data) => {
                                             return (
-                                                <li style={{color:"white", listStyle:"none"}}
-                                                    key={data.id}>
-                                                    {data.username}
-                                                </li>
+                                            <li style={{color:"white", listStyle:"none"}}
+                                                key={data.id}>
+                                                {data.username}
+                                            </li>
                                             );
                                         })
-                                    ) : (
-                                        <p>No users available</p>
-                                    )}
+                                    ) :
+                                    (<p>No users available</p>)
+                                    }
                                 </ul>
                             </div>
                         </div>
                     </div>
+                    {userJoinRoomList.map((userJoinRoom, index) => (
+                        <div key={index} className="message" id={"you"}>
+                            <div className="message-content">
+                                <p>{userJoinRoom.username} đã vào phòng</p>
+                            </div>
+                        </div>
+                    ))}
+                    {userLeaveRoomList.map((userLeaveRoom, index) => (
+                        <div key={index} className="message" id={"you"}>
+                            <div className="message-content">
+                                <p>{userLeaveRoom.username} đã rời khỏi phòng</p>
+                            </div>
+                        </div>
+                    ))}
                     {messageList.map((messageContent)=>{
-
-                        console.log(messageContent)
-
                         return (
+                        <div>
                             <div className="message" id={username=== messageContent.author ? "you" : "other"}>
                                 <div className="message-content">
                                     <p>{messageContent.message}</p>
                                 </div>
-
                                 <div className="message-meta">
                                     <p id="time">{messageContent.time}</p>
                                     <p id="author">{messageContent.author}</p>
                                 </div>
                             </div>
+                        </div>
                         )
                     })}
                 </ScrollToBottom>
             </div>
             <div className="chat-footer">
-                <input type="text"
-                       placeholder="Hey..."
-                       value={currentMsg}
-                       onChange={function(event){
-                           setCurrentMsg(event.target.value);
-                       }}
-                       onKeyPress={(event)=>{
+                <input
+                   type="text"
+                   placeholder="Hey..."
+                   value={currentMsg}
+                   onChange={function(event){
+                       setCurrentMsg(event.target.value);
+                   }}
+                   onKeyPress={(event)=>{
 
-                           event.key === "Enter" && sendMessage();
-                       }}
+                       event.key === "Enter" && sendMessage();
+                   }}
                 />
                 <button onClick={sendMessage}>&#9658;</button>
             </div>

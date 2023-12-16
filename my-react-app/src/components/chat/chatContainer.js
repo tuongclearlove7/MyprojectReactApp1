@@ -7,14 +7,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RenderEffect from "../../feature/renderEffect";
 import Swal from "sweetalert2";
-// component
-function ChatContainer(props) {
 
+
+function ChatContainer(props) {
 
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
     const navigate = useNavigate();
     const socketRef = useRef(props.socket);
+
     const notify = (text) => toast.error(text, {
 
         position: "top-center",
@@ -63,7 +64,6 @@ function ChatContainer(props) {
     }, []);
 
 
-
     const text = RenderEffect("Hãy nhập tên và chọn phòng!");
 
     const joinRoom = function () {
@@ -105,7 +105,6 @@ function ChatContainer(props) {
                         notify('Vui lòng nhập vào!');
 
                     }else {
-
                         props.socket.emit(process.env.REACT_APP_JOIN_ROOM, {room, username});
                         props.setU(username);
                         props.setR(room);
@@ -114,12 +113,6 @@ function ChatContainer(props) {
                 }
             }
         }
-    }
-
-    const leaveRoom = function () {
-
-        props.setShowChat(false);
-        navigate('/');
     }
 
     return (
@@ -157,7 +150,7 @@ function ChatContainer(props) {
                         socket={props.socket}
                         username={username}
                         room={room}
-                        onLeaveRoom={leaveRoom}
+                        setShowChat={props.setShowChat}
                         title={props.title}
                         setRoom={setRoom}
                         setUsername={setUsername}

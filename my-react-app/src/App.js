@@ -19,6 +19,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Blog from "./components/youtube/blog";
+import {Reconnect} from "./feature/reconntect";
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME);
 
 function App() {
@@ -33,8 +34,9 @@ function App() {
             <div className="container">
                 <Header u={u} r={r} socket={socket} setShowChat={setShowChat} />
                 <Routes>
-                    <Route path="/" element={<ChatContainer setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />} />
-                    <Route path="/chat" element={<ChatContainer setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />} />
+                    <Route path="/home" element={<Home title={`HOME - ${authorWebName}`} learn={`${authorWebName}`}/>}/>
+                    <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST} setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />} />
+                    <Route path="/chat" element={<ChatContainer  socket_url={process.env.REACT_APP_API_LOCALHOST}  setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />} />
                     <Route path="/company" element={<Company  title={`COMPANY - ${authorWebName}`} />}/>
                     <Route path="/blog" element={<Blog  title={`BLOG - ${authorWebName}`} />}/>
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>
