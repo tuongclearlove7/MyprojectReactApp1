@@ -13,33 +13,61 @@ import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
 import Home from "./components/home/home";
 import Company from "./components/company/company";
-import Youtube from "./components/youtube/blog";
 import ChatContainer from "./components/chat/chatContainer";
+import Login from "./components/auth/login";
+import Register from "./components/auth/register";
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken, selectToken } from './redux/authSlice';
 import io from 'socket.io-client';
+import Cookies from 'js-cookie';
 import Blog from "./components/youtube/blog";
-import {Reconnect} from "./feature/reconntect";
-const socket = io.connect(process.env.REACT_APP_API_HOSTNAME);
+import Account from "./components/account/account";
+import StatusLogin from "./feature/statusLogin";
+
+const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
+    extraHeaders: {
+        Authorization : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+    },
+});
+
 
 function App() {
 
     const authorWebName = "CLEARLOVE7";
     const [showChat, setShowChat] = useState(false);
+    const [showHeader, setShowHeader] = useState(true);
+    const user = Cookies.get('token');
     let [u, setU] = useState("");
     let [r, setR] = useState("");
+
+    socket.on('connect_error', (error) => {
+
+        console.error('Connection error:', error.message);
+    });
+
+    socket.on('connect', () => {
+
+        console.log("Socket connected");
+    });
 
     return (
         <div className="App">
             <div className="container">
-                <Header u={u} r={r} socket={socket} setShowChat={setShowChat} />
+                <Header u={u} r={r} socket={socket}  setShowChat={setShowChat} showHeader={showHeader} />
                 <Routes>
+                    <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST}
+                    setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
+                    <Route path="/chat" element={<ChatContainer  socket_url={process.env.REACT_APP_API_LOCALHOST}
+                     setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
                     <Route path="/home" element={<Home title={`HOME - ${authorWebName}`} learn={`${authorWebName}`}/>}/>
-                    <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST} setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />} />
-                    <Route path="/chat" element={<ChatContainer  socket_url={process.env.REACT_APP_API_LOCALHOST}  setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />} />
+                    {user && <Route path="/account" exact element={<Account setShowHeader={setShowHeader} />}  />}
                     <Route path="/company" element={<Company  title={`COMPANY - ${authorWebName}`} />}/>
                     <Route path="/blog" element={<Blog  title={`BLOG - ${authorWebName}`} />}/>
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>
+                    <Route path="/login" element={<Login  title={`LOGIN - ${authorWebName}`} />}/>
+                    <Route path="/register" element={<Register  title={`REGISTER - ${authorWebName}`} />}/>
                 </Routes>
                 <ScrollToTop smooth color="#6f00ff" />
                 <Footer/>

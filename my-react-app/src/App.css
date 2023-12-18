@@ -1,6 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
 
-
+*{
+    padding: 0;
+    margin: 0;
+}
 
 .App-logo {
     height: 40vmin;
@@ -14,6 +17,7 @@
 }
 
 .App-header {
+    clear: both;
     background-color: white;
     min-height: 100vh;
     display: flex;
@@ -42,10 +46,20 @@
     }
 }
 
+.register-container{
 
-*{
-    padding: 0;
-    margin: 0;
+    clear: both;
+    padding-top: 50px;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.login-container{
+
+    clear: both;
+    padding-top: 50px;
+    margin: 0 auto;
+    max-width: 900px;
 }
 
 .fa {
@@ -64,6 +78,11 @@
     margin: 0 auto;
 }
 
+.home-container{
+
+    clear: both;
+}
+
 .home-container h1{
 
     color: #00d000;
@@ -72,6 +91,7 @@
 
 .blog-container{
 
+    clear: both;
     padding-top: 50px;
 }
 
@@ -84,6 +104,7 @@
 
 .contact-container{
 
+    clear: both;
     padding-top: 50px;
     padding-left: 10px;
 }
@@ -271,7 +292,9 @@ body {
 
 .joinChatContainer {
 
-
+    float: left;
+    width: 100%;
+    clear: both;
     margin-top: 100px;
     display: flex;
     flex-direction: column;
@@ -312,6 +335,7 @@ body {
     background: #2e7d32;
 }
 .chat-container {
+    clear: both;
     padding-top: 50px;
     display: grid;
     place-items: center;
@@ -497,7 +521,20 @@ body {
 
 .contact-me{
 
+    clear: both;
     width: 50%;
+}
+
+.my-info{
+    float: left;
+    width: 70%;
+}
+
+
+.navbar{
+
+    float: left;
+    width: 100%;
 }
 
 
@@ -509,4 +546,14 @@ body {
         width: 100%;
     }
 
+}
+
+.footer-container{
+
+    clear: both;
+}
+
+.header-hidden {
+
+    display: none;
 }

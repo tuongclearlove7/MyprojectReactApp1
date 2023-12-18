@@ -8,7 +8,7 @@ function Blog(props){
     const bannerImg = "https://www.sevenstarwebsolutions.com/wp-content/uploads/2017/12/reactbanner.jpg";
     const author = "TuongClearlove7.";
     const title = ``;
-    const hostname = `${process.env.REACT_APP_API_HOSTNAME}blog-api?access_key=${process.env.REACT_APP_ACCESS_KEY}`;
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}blog-api`;
 
     useEffect(() => {
 
@@ -16,18 +16,27 @@ function Blog(props){
 
     }, [props.title]);
 
+
     useEffect(() => {
 
-        axios.get(hostname)
-
-            .then(response => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(hostname, {
+                    headers: {
+                        Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+                    },
+                });
 
                 setBlogs(response.data);
-            })
-            .catch(err => {
 
-                console.log(err);
-            });
+            } catch (error) {
+
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData().then();
+
     }, []);
 
 

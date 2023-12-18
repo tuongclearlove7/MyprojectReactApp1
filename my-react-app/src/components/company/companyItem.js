@@ -8,25 +8,34 @@ function CompanyItem(props) {
 
     //state
     const [companys, setCompanys] = useState([]);
-    const hostname = `${process.env.REACT_APP_API_HOSTNAME}company-api?access_key=${process.env.REACT_APP_ACCESS_KEY}`;
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}company-api`;
 
     useEffect(() => {
 
         document.title = props.title;
     }, []);
 
+
     useEffect(() => {
 
-        axios.get(hostname)
-
-            .then(response => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(hostname, {
+                    headers: {
+                        Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+                    },
+                });
 
                 setCompanys(response.data);
-            })
-            .catch(err => {
 
-                console.log(err);
-            });
+            } catch (error) {
+
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData().then();
+
     }, []);
 
     const text = RenderEffect("Công ty dự kiến");

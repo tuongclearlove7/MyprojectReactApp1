@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RenderEffect from "../../feature/renderEffect";
 import Swal from "sweetalert2";
+import StatusLogin from "../../feature/statusLogin";
 
 
 function ChatContainer(props) {
@@ -105,10 +106,18 @@ function ChatContainer(props) {
                         notify('Vui lòng nhập vào!');
 
                     }else {
-                        props.socket.emit(process.env.REACT_APP_JOIN_ROOM, {room, username});
-                        props.setU(username);
-                        props.setR(room);
-                        props.setShowChat(true);
+
+                        if (!props.socket.connected) {
+
+                            notify("Lỗi xác thực!");
+
+                        }else{
+
+                            props.socket.emit(process.env.REACT_APP_JOIN_ROOM, {room, username});
+                            props.setU(username);
+                            props.setR(room);
+                            props.setShowChat(true);
+                        }
                     }
                 }
             }
@@ -136,30 +145,27 @@ function ChatContainer(props) {
                             setRoom(event.target.value);
                         }}>
                         <option selected>Chọn phòng</option>
-                        {roomNameData.map((roomName, index) => (
+                            {roomNameData.map((roomName, index) => (
                             <option key={index} value={roomName}>
                                 {roomName}
                             </option>
-                        ))}
+                            ))}
                     </select>
                     <button onClick={joinRoom}>VÀO PHÒNG</button>
                 </div>
-            ) : (
-                <div className="chat-container">
-                    <Chat
-                        socket={props.socket}
-                        username={username}
-                        room={room}
-                        setShowChat={props.setShowChat}
-                        title={props.title}
-                        setRoom={setRoom}
-                        setUsername={setUsername}
-                    />
-                </div>
-            )}
+                ) : (
+                    <div className="chat-container">
+                        <Chat socket={props.socket}
+                            username={username}
+                            room={room}
+                            setShowChat={props.setShowChat}
+                            title={props.title}
+                            setRoom={setRoom}
+                            setUsername={setUsername}/>
+                    </div>
+                )}
             <ToastContainer />
         </div>
-
     );
 }
 

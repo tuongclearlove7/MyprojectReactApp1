@@ -116,7 +116,6 @@ function Contact(props){
                                name="user_name"
                                placeholder={"Nhập vào tên của bạn..."}
                                onChange={(event) => {
-
                                    setUser_name(event.target.value);
                                }}/>
                         <label>Email</label>
@@ -124,14 +123,12 @@ function Contact(props){
                                name="user_email"
                                placeholder={"Nhập vào Email của bạn..."}
                                onChange={(event) => {
-
                                    setEmail(event.target.value);
                                }}/>
                         <label>Lời nhắn</label>
                         <textarea name="message"
                                   placeholder={"Nhập vào nội dung tin nhắn..."}
                                   onChange={(event) => {
-
                                       setMsgEmail(event.target.value);
                                   }}/>
                         <input type="submit" value="Gửi" />

@@ -21,7 +21,7 @@ function Header(props) {
     };
 
     return (
-        <div className="header">
+        <div className={props.showHeader ? "header" : "header-hidden"}>
             <div className={"my-info"} style={{padding:"20px",}}>
                 <span className={"list-icon"}>
                      <li style={{listStyle:"none"}}>
@@ -30,6 +30,9 @@ function Header(props) {
                         <a style={{fontSize:sizeIcon}} className="fa fa-linkedin" href={`https://www.linkedin.com/in/tuong-tran-the-391688293/`}></a>
                         <a style={{fontSize:sizeIcon}} className="fa fa-instagram" href={``}></a>
                          <b>Theo dõi tôi</b>
+                         <b style={{paddingLeft:"15px"}}>
+                             <Link style={{textDecoration:"none"}} to={"account"}>Vào lại tài khoản</Link>
+                         </b>
                     </li>
                 </span>
             </div>
@@ -92,7 +95,23 @@ function Header(props) {
                                             BÀI VIẾT
                                         </Link>
                                     </li>
+                                    <li>
+                                        <Link className="dropdown-item" onClick={async ()=>{await leaveRoom();}} to={"account"}>
+                                            TÀI KHOẢN
+                                        </Link>
+                                    </li>
                                 </ul>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link" onClick={async ()=>{await leaveRoom();}} to="login">
+                                    ĐĂNG NHẬP
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" onClick={async ()=>{await leaveRoom();}} to="register">
+                                    ĐĂNG KÝ
+                                </Link>
                             </li>
                         </ul>
                         <form className="d-flex" role="search">

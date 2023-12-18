@@ -93,9 +93,9 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
 
         }else{
 
-            leaveRoom().then(r => {
+            leaveRoom().then(res => {
 
-                console.log(r);
+                console.log(res);
 
             }).catch(error=>{
 
@@ -189,17 +189,16 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
                                 <p id="user">Người dùng:</p>
                                 <ul>
                                     {userList.length > 0 ? (
-                                        userList.map((data) => {
-                                            return (
-                                            <li style={{color:"white", listStyle:"none"}}
-                                                key={data.id}>
+                                        userList.map((data) => (
+                                            <li style={{ color: "white", listStyle: "none" }} key={data.id}>
                                                 {data.username}
                                             </li>
-                                            );
-                                        })
-                                    ) :
-                                    (<p>No users available</p>)
-                                    }
+                                        ))
+                                    ) : (
+                                        <div>
+                                            <p>No users available</p>
+                                        </div>
+                                    )}
                                 </ul>
                             </div>
                         </div>
@@ -244,7 +243,6 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
                        setCurrentMsg(event.target.value);
                    }}
                    onKeyPress={(event)=>{
-
                        event.key === "Enter" && sendMessage();
                    }}
                 />
