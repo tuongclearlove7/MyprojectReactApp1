@@ -20,7 +20,7 @@ function StatusLogin(props){
     });
 
     const token = Cookies.get('token');
-    const url = `${process.env.REACT_APP_API_LOCALHOST}auth-api/login`;
+    const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
 
     const handleLogout = () => {
 
