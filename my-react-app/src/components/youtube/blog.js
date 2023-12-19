@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import YoutubeItem from "./youtubeItem";
 import axios from "axios";
+import {RedirectAccount} from "../../feature/redirectAccount";
 
 function Blog(props){
 
@@ -12,6 +13,7 @@ function Blog(props){
 
     useEffect(() => {
 
+        RedirectAccount();
         document.title = props.title;
 
     }, [props.title]);
@@ -47,13 +49,13 @@ function Blog(props){
                     return(
                         <div key={index}>
                             <YoutubeItem title={item.title || "Không tìm thấy dữ liệu"}
-                             colorLan={"#26C6DA" || "Không tìm thấy dữ liệu"}
-                             image={item.image || "Không tìm thấy dữ liệu"}
-                             author={item.author || "Không tìm thấy dữ liệu"}
-                             content={item.content || "Không tìm thấy dữ liệu"}
-                             slug={`https://react.dev/` || "Không tìm thấy dữ liệu"}
-                             index={(index+1) || "Không tìm thấy dữ liệu"}
-                             createdAT={item.createdAt || "Không tìm thấy dữ liệu"}
+                                         colorLan={"#26C6DA" || "Không tìm thấy dữ liệu"}
+                                         image={item.image || "Không tìm thấy dữ liệu"}
+                                         author={item.author || "Không tìm thấy dữ liệu"}
+                                         content={item.content || "Không tìm thấy dữ liệu"}
+                                         slug={`https://react.dev/` || "Không tìm thấy dữ liệu"}
+                                         index={(index+1) || "Không tìm thấy dữ liệu"}
+                                         createdAT={item.createdAt || "Không tìm thấy dữ liệu"}
                             />
                         </div>
                     );

@@ -47,7 +47,6 @@ function CompanyItem(props) {
                 <thead>
                 {
                     tableData.map((item, i)=>{
-
                         return(
                             <tr>
                                 <th>{item.th_name || "Tên công ty"}</th>

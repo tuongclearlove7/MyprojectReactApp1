@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 import Account from "../account";
 
@@ -10,9 +10,9 @@ function HeaderAccount(props){
             <div>
                 <nav className="navbar navbar-expand-lg bg-body-tertiary">
                     <div className="container-fluid">
-                        <a className="navbar-brand" href="">
-                            {props.username.toUpperCase()}
-                        </a>
+                        <Link className="navbar-brand" to={"/account"}>
+                            {props.username ? props.username.toUpperCase() : ""}
+                        </Link>
                         <button
                             className="navbar-toggler"
                             type="button"
@@ -32,8 +32,13 @@ function HeaderAccount(props){
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link active" to="/account-info">
-                                        Tài khoản
+                                    <Link className="nav-link active" to="/account/info">
+                                        Thông tin
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link active" to="/account/chat">
+                                        Phòng chat
                                     </Link>
                                 </li>
                                 <li className="nav-item dropdown">

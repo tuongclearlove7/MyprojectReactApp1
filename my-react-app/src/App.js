@@ -25,6 +25,8 @@ import Cookies from 'js-cookie';
 import Blog from "./components/youtube/blog";
 import Account from "./components/account/account";
 import StatusLogin from "./feature/statusLogin";
+import {ReMoveStore} from "./feature/removeStore";
+import {toast} from "react-toastify";
 
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     extraHeaders: {
@@ -32,12 +34,10 @@ const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     },
 });
 
-
 function App() {
 
     const authorWebName = "CLEARLOVE7";
     const [showChat, setShowChat] = useState(false);
-    const [showHeader, setShowHeader] = useState(true);
     const user = Cookies.get('token');
     let [u, setU] = useState("");
     let [r, setR] = useState("");
@@ -52,17 +52,27 @@ function App() {
         console.log("Socket connected");
     });
 
+    useEffect(() => {
+
+        localStorage.setItem("showHeader", "false");
+    }, []);
+
+    ReMoveStore("notify",2000,2000);
+
     return (
         <div className="App">
             <div className="container">
-                <Header u={u} r={r} socket={socket}  setShowChat={setShowChat} showHeader={showHeader} />
+                <Header u={u} r={r} socket={socket}  setShowChat={setShowChat}/>
                 <Routes>
                     <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST}
                     setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
                     <Route path="/chat" element={<ChatContainer  socket_url={process.env.REACT_APP_API_LOCALHOST}
                      setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
                     <Route path="/home" element={<Home title={`HOME - ${authorWebName}`} learn={`${authorWebName}`}/>}/>
-                    {user && <Route path="/account" exact element={<Account setShowHeader={setShowHeader} />}  />}
+                    {user && <Route path="/account/*" exact element={<Account socket_url={process.env.REACT_APP_API_LOCALHOST}
+                    setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat}
+                    setShowChat={setShowChat}/>}/>}
+                    <Route path="/account" element={<Account exact element={<Home/>}/>}/>
                     <Route path="/company" element={<Company  title={`COMPANY - ${authorWebName}`} />}/>
                     <Route path="/blog" element={<Blog  title={`BLOG - ${authorWebName}`} />}/>
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>

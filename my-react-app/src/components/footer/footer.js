@@ -1,6 +1,5 @@
 import React from "react";
 
-//component
 function Footer(props){
 
     return(

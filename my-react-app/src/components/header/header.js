@@ -3,14 +3,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import {Link, useNavigate} from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 import {Reconnect} from "../../feature/reconntect";
+import Cookies from "js-cookie";
+import RenderEffect from "../../feature/renderEffect";
 
 
 function Header(props) {
 
+    const username = Cookies.get('username');
     const navigate = useNavigate();
     const sizeIcon = "25px";
     const r_m = props.r;
     const u_m = props.u;
+    const headerID= localStorage.getItem("header_id");
+    const tech_header = RenderEffect("Công nghệ Web:");
+    const react = RenderEffect("React");
+    const js = RenderEffect("Js");
+
 
     const leaveRoom = async () => {
 
@@ -21,7 +29,7 @@ function Header(props) {
     };
 
     return (
-        <div className={props.showHeader ? "header" : "header-hidden"}>
+        <div className={!username ? "header" : "header-hidden"}>
             <div className={"my-info"} style={{padding:"20px",}}>
                 <span className={"list-icon"}>
                      <li style={{listStyle:"none"}}>
@@ -32,6 +40,13 @@ function Header(props) {
                          <b>Theo dõi tôi</b>
                          <b style={{paddingLeft:"15px"}}>
                              <Link style={{textDecoration:"none"}} to={"account"}>Vào lại tài khoản</Link>
+                         </b>
+                          <b className={"web-engine"} style={{paddingLeft:"15px"}}>
+                              {tech_header}
+                              <a style={{textDecoration:"none", color:"#19b2ed"}} href={"https://react.dev/"}>
+                                  <span style={{padding:"5px 5px"}}>{react}</span>
+                                  <span style={{color:"#FF9800"}}>{js}</span>
+                              </a>
                          </b>
                     </li>
                 </span>

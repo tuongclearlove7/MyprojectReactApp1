@@ -1,6 +1,6 @@
 import React from "react";
 
-//component
+
 function View(props){
 
     return(

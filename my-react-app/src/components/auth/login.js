@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken, selectToken } from '../../redux/authSlice';
+import LoginMobileForm from "../../mobileComponents/auth/loginMobileForm";
+import {ReMoveStoreSuccess} from "../../feature/removeStore";
 
 function Login(props){
 
@@ -25,9 +27,12 @@ function Login(props){
 
     });
 
+
     useEffect(() => {
 
+        ReMoveStoreSuccess(localStorage.getItem("register_success"),2000, 2000);
         document.title = props.title;
+
     }, []);
 
     const handleChange = ({ currentTarget: input }) => {
@@ -64,43 +69,51 @@ function Login(props){
     };
 
     return(
-        <div className="login-container">
-            <div className={styles.login_form_container}>
-                <div className={styles.left}>
-                    <form className={styles.form_container} onSubmit={handleSubmit}>
-                        <h1>ĐĂNG NHẬP TÀI KHOẢN</h1>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            name="email"
-                            onChange={handleChange}
-                            value={data.email}
-                            required
-                            className={styles.input}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Mật khẩu"
-                            name="password"
-                            onChange={handleChange}
-                            value={data.password}
-                            required
-                            className={styles.input}
-                        />
-                        <button type="submit" className={styles.green_btn}>
-                            ĐĂNG NHẬP
-                        </button>
-                    </form>
-                </div>
-                <div className={styles.right}>
-                    <h1>Đăng ký ngay</h1>
-                    <Link to="/register">
-                        <button type="button" className={styles.white_btn}>
-                            ĐĂNG KÝ
-                        </button>
-                    </Link>
+        <div>
+            <div className="login-container">
+                <div className={styles.login_form_container}>
+                    <div className={styles.left}>
+                        <form className={styles.form_container} onSubmit={handleSubmit}>
+                            <h1>ĐĂNG NHẬP TÀI KHOẢN</h1>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                                onChange={handleChange}
+                                value={data.email}
+                                required
+                                className={styles.input}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Mật khẩu"
+                                name="password"
+                                onChange={handleChange}
+                                value={data.password}
+                                required
+                                className={styles.input}
+                            />
+                            <button type="submit" className={styles.green_btn}>
+                                ĐĂNG NHẬP
+                            </button>
+                        </form>
+                    </div>
+                    <div className={styles.right}>
+                        <h1>Đăng ký ngay</h1>
+                        <Link to="/register">
+                            <button type="button" className={styles.white_btn}>
+                                ĐĂNG KÝ
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
+            <LoginMobileForm
+                handleSubmit={handleSubmit}
+                handleChange={handleChange}
+                email={data.email}
+                password={data.password}
+            />
         </div>
     );
 }

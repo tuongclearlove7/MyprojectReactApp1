@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import RenderEffect from "../../feature/renderEffect";
 import Swal from "sweetalert2";
 import StatusLogin from "../../feature/statusLogin";
+import {RedirectAccount} from "../../feature/redirectAccount";
+import logo from "../../logo.svg";
 
 
 function ChatContainer(props) {
@@ -44,6 +46,7 @@ function ChatContainer(props) {
 
     useEffect(() => {
 
+        RedirectAccount();
         notifyWelcome();
         document.title = props.title;
 
@@ -131,6 +134,9 @@ function ChatContainer(props) {
                     <h4 className={`render`}>
                         {text}
                     </h4>
+                    <header>
+                        <img src={logo} className="App-logo" alt="logo" />
+                    </header>
                     <input
                         type="text"
                         placeholder="Nhập tên của bạn..."
@@ -145,11 +151,16 @@ function ChatContainer(props) {
                             setRoom(event.target.value);
                         }}>
                         <option selected>Chọn phòng</option>
-                            {roomNameData.map((roomName, index) => (
-                            <option key={index} value={roomName}>
-                                {roomName}
-                            </option>
-                            ))}
+                        {roomNameData.map((item, index) => {
+                            if ('room' in item) {
+                                return item.room.map((roomName, roomIndex) => (
+                                    <option key={`${index}-${roomIndex}`} value={roomName}>
+                                        {roomName}
+                                    </option>
+                                ));
+                            }
+                            return null;
+                        })}
                     </select>
                     <button onClick={joinRoom}>VÀO PHÒNG</button>
                 </div>
@@ -161,7 +172,8 @@ function ChatContainer(props) {
                             setShowChat={props.setShowChat}
                             title={props.title}
                             setRoom={setRoom}
-                            setUsername={setUsername}/>
+                            setUsername={setUsername}
+                        />
                     </div>
                 )}
             <ToastContainer />

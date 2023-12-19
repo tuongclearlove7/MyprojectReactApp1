@@ -1,3 +1,14 @@
 export const roomNameData=[
-    "NodeJS","Python","ReactJs", "Ruby","Java"
+    {
+        room:[ "NodeJS","Python","ReactJs", "Ruby","Java"]
+    },
+    {
+        image:[
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
+    }
 ];

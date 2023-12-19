@@ -20,7 +20,7 @@ function StatusLogin(props){
     });
 
     const token = Cookies.get('token');
-    const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
+    const url = `${process.env.REACT_APP_API_LOCALHOST}auth-api/login`;
 
     const handleLogout = () => {
 
@@ -48,17 +48,11 @@ function StatusLogin(props){
 
                 console.error("Error fetching data:", error);
 
-                notifyErr("Hết hạn đăng nhập!",2000);
-
-
                 if (error.response && error.response.status >= 401) {
 
+                    localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
                     handleLogout();
                 }
-
-                // setTimeout(() => {
-                //
-                // }, 4000);
             }
         };
 

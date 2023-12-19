@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import emailjs from "@emailjs/browser";
 import styled from "styled-components";
 import Swal from "sweetalert2";
+import {RedirectAccount} from "../../feature/redirectAccount";
 
 //component
 function Contact(props){
@@ -15,6 +16,7 @@ function Contact(props){
 
     useEffect(() => {
 
+        RedirectAccount();
         document.title = props.title;
 
     }, [props.title]);
@@ -50,7 +52,6 @@ function Contact(props){
     const sendEmail = (e) => {
 
         e.preventDefault();
-
 
         if (!user_name || !email || !msgEmail) {
 

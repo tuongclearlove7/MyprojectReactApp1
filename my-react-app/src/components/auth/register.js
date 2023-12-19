@@ -3,6 +3,7 @@ import styles from "./registerStyle.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {toast} from "react-toastify";
+import RegisterMobileForm from "../../mobileComponents/auth/registerMobileForm";
 
 function Register(props){
 
@@ -50,6 +51,7 @@ function Register(props){
                     Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
             });
+            localStorage.setItem("register_success", "Tạo tài khoản thành công")
             window.location = "/login";
             console.log("register now");
 
@@ -64,62 +66,71 @@ function Register(props){
         }
     }
 
-    return(
-        <div className="register-container">
-            <div className={styles.signup_form_container}>
-                <div className={styles.left}>
-                    <h1>Đăng nhập ngay</h1>
-                    <Link to="/login">
-                        <button type="button" className={styles.white_btn}>
-                            ĐĂNG NHẬP
-                        </button>
-                    </Link>
-                </div>
-                <div className={styles.right}>
-                    <form className={styles.form_container} onSubmit={handleSubmit}>
-                        <h1>TẠO TÀI KHOẢN</h1>
-                        <input
-                            type="text"
-                            placeholder="Họ"
-                            name="firstName"
-                            onChange={handleChange}
-                            value={data.firstName}
-                            required
-                            className={styles.input}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Tên"
-                            name="lastName"
-                            onChange={handleChange}
-                            value={data.lastName}
-                            required
-                            className={styles.input}
-                        />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            name="email"
-                            onChange={handleChange}
-                            value={data.email}
-                            required
-                            className={styles.input}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Mật khẩu"
-                            name="password"
-                            onChange={handleChange}
-                            value={data.password}
-                            required
-                            className={styles.input}
-                        />
-                        <button type="submit" className={styles.green_btn}>
-                            ĐĂNG KÝ
-                        </button>
-                    </form>
+    return(<div>
+            <div className="register-container">
+                <div className={styles.signup_form_container}>
+                    <div className={styles.left}>
+                        <h1>Đăng nhập ngay</h1>
+                        <Link to="/login">
+                            <button type="button" className={styles.white_btn}>
+                                ĐĂNG NHẬP
+                            </button>
+                        </Link>
+                    </div>
+                    <div className={styles.right}>
+                        <form className={styles.form_container} onSubmit={handleSubmit}>
+                            <h1>TẠO TÀI KHOẢN</h1>
+                            <input
+                                type="text"
+                                placeholder="Họ"
+                                name="firstName"
+                                onChange={handleChange}
+                                value={data.firstName}
+                                required
+                                className={styles.input}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Tên"
+                                name="lastName"
+                                onChange={handleChange}
+                                value={data.lastName}
+                                required
+                                className={styles.input}
+                            />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                                onChange={handleChange}
+                                value={data.email}
+                                required
+                                className={styles.input}
+                            />
+                            <input
+                                type="password"
+                                placeholder="Mật khẩu"
+                                name="password"
+                                onChange={handleChange}
+                                value={data.password}
+                                required
+                                className={styles.input}
+                            />
+                            <button type="submit" className={styles.green_btn}>
+                                ĐĂNG KÝ
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+            <RegisterMobileForm
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                firstName={data.firstName}
+                lastName={data.lastName}
+                email={data.email}
+                password={data.password}
+            />
         </div>
     );
 }

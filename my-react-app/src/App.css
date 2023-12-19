@@ -6,20 +6,50 @@
 }
 
 .App-logo {
-    height: 40vmin;
+    height: 25vmin;
     pointer-events: none;
 }
+
+.App-dash-logo {
+    height: 25vmin;
+    pointer-events: none;
+}
+
+.App-user-logo{
+
+    height: 3vmin;
+    pointer-events: none;
+
+}
+
+
+.App-chat-logo {
+    height: 25vmin;
+    pointer-events: none;
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {
         animation: App-logo-spin infinite 20s linear;
+    }
+    .App-dash-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+    .App-chat-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+
+    .App-user-logo{
+        animation: App-logo-spin infinite 5s linear;
+
     }
 }
 
 .App-header {
     clear: both;
     background-color: white;
-    min-height: 100vh;
+    min-height: 60vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -537,13 +567,46 @@ body {
     width: 100%;
 }
 
+@media (min-width: 951px) {
+    .login-mobile-container {
+        display: none;
+    }
 
-@media (max-width: 800px) {
+    .register-mobile-container {
+        display: none;
+    }
+}
+
+@media (max-width: 950px) {
 
 
     .contact-me{
 
         width: 100%;
+    }
+
+    .login-container{
+
+        display: none;
+    }
+
+    .login-mobile-container{
+
+        padding-top: 50px;
+        clear: both;
+        display: block;
+    }
+
+    .register-container{
+
+        display: none;
+    }
+
+    .register-mobile-container{
+
+        padding-top: 50px;
+        clear: both;
+        display: block;
     }
 
 }
@@ -556,4 +619,17 @@ body {
 .header-hidden {
 
     display: none;
+}
+
+.info-container{
+
+    float: left;
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+}
+
+#header_display{
+
+    display: block;
 }
