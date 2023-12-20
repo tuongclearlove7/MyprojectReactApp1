@@ -7,8 +7,6 @@
 - Link backend server: https://web-chat.up.railway.app/
 - Link source code backend: https://github.com/alison16smotthie/Web-chat
 - Link source code frontend: https://github.com/tuongclearlove7/MyprojectReactApp1/tree/main/my-react-app
-- Web api Java Spring Boot project
-
 
 
 ## DEVELOPER
