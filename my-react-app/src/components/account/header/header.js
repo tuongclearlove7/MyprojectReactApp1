@@ -1,9 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Account from "../account";
+import {UserContext} from "../../../feature/UserContext";
 
 
 function HeaderAccount(props){
+
+    const { logout } = useContext(UserContext);
 
     return (
         <div className="header-account">

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import YoutubeItem from "./youtubeItem";
 import axios from "axios";
-import {RedirectAccount} from "../../feature/redirectAccount";
+import {UserContext} from "../../feature/UserContext";
 
 function Blog(props){
 
@@ -10,11 +10,12 @@ function Blog(props){
     const author = "TuongClearlove7.";
     const title = ``;
     const hostname = `${process.env.REACT_APP_API_HOSTNAME}blog-api`;
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
 
     useEffect(() => {
 
         RedirectAccount();
-        document.title = props.title;
+        setTitlePage(props.title);
 
     }, [props.title]);
 

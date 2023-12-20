@@ -8,14 +8,6 @@ function DashBoard(props){
 
     const username = Cookies.get('username');
 
-    useEffect(() => {
-
-        if(username){
-
-            document.title = `Tài khoản ${username}`;
-        }
-    }, []);
-
     return(
         <div className="home-container">
             <header className="App-header">

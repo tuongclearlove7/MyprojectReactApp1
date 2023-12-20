@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styles from "./registerStyle.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {toast} from "react-toastify";
 import RegisterMobileForm from "../../mobileComponents/auth/registerMobileForm";
+import {UserContext} from "../../feature/UserContext";
 
 function Register(props){
 
-    const navigate = useNavigate();
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
     const [data, setData] = useState({
 
         firstName:"",
@@ -31,8 +33,10 @@ function Register(props){
 
     useEffect(() => {
 
-        document.title = props.title;
-    }, []);
+        RedirectAccount();
+        setTitlePage(props.title);
+
+    }, [props.title]);
 
     const handleChange = ({ currentTarget: input }) => {
 

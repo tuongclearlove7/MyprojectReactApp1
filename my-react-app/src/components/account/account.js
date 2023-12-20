@@ -1,5 +1,5 @@
 import HeaderAccount from "./header/header";
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Cookies from 'js-cookie';
 import axios from "axios";
 import StatusLogin from "../../feature/statusLogin";
@@ -14,25 +14,27 @@ import Register from "../auth/register";
 import ChatAccount from "./chat/chatAccount";
 import Info from "./info/info";
 import DashBoard from "./dashboard/dashboard";
+import {UserContext} from "../../feature/UserContext";
 
 const Account = (props) => {
 
     const username = Cookies.get('username');
     const email = Cookies.get('email');
     const token = Cookies.get('token');
-    const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
+    const { logout } = useContext(UserContext);
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
 
     useEffect(() => {
 
         if(!username){
 
-            document.title = `Account - TUONGCLEARLOVE7`;
+            setTitlePage("ACCOUNT - CLEARLOVE7");
+
+        }else{
+
+            setTitlePage(`Tài khoản ${username}`);
         }
-
-        document.title = `Tài khoản ${username}`;
-
     }, [props.token, username]);
-
 
     const handleLogout = () => {
 
@@ -40,32 +42,31 @@ const Account = (props) => {
 
         if(confirmLogout){
 
-            Cookies.remove('token');
-            Cookies.remove('username');
-            Cookies.remove('email');
-            localStorage.removeItem("username");
-            window.location = "/login";
+            logout();
         }
     };
 
     return (
-        <div>
-            <StatusLogin />
-            <HeaderAccount username={username} handleLogout={handleLogout} />
-            <div className="account-container">
-                <Routes>
-                    <Route index element={<DashBoard />}/>
-                    <Route path="/chat"
-                        element={<ChatAccount
-                        socket_url={process.env.REACT_APP_API_LOCALHOST}
-                        setU={props.setU} setR={props.setR}
-                        socket={props.socket}
-                        showChat={props.showChat}
-                        setShowChat={props.setShowChat} />}
-                    />
-                    <Route path="/info" element={<Info email={email} username={username} />}/>
-                </Routes>
+        <div>{username && (
+            <div className={"account"}>
+                <StatusLogin />
+                <HeaderAccount  username={username} handleLogout={handleLogout} />
+                <div className="account-container">
+                    <Routes>
+                        <Route index element={<DashBoard />}/>
+                        <Route path="/chat"
+                           element={<ChatAccount
+                           socket_url={process.env.REACT_APP_API_LOCALHOST}
+                           setU={props.setU} setR={props.setR}
+                           socket={props.socket}
+                           showChat={props.showChat}
+                           setShowChat={props.setShowChat} />}
+                        />
+                        <Route path="/info" element={<Info email={email} username={username} />}/>
+                    </Routes>
+                </div>
             </div>
+            )}
         </div>
     );
 };

@@ -1,25 +1,21 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import logo from '../../logo.svg';
 import '../../App.css';
 import CompanyItem from "../company/companyItem";
-import {RedirectAccount} from "../../feature/redirectAccount";
 import Cookies from "js-cookie";
-
+import {UserContext} from "../../feature/UserContext";
 
 function Home(props){
 
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+
     useEffect(() => {
 
-        const username = Cookies.get('username');
-
-        if(username){
-
-            RedirectAccount();
-        }
-
-        document.title = `HOME - CLEARLOVE7`;
+        RedirectAccount();
+        setTitlePage(`HOME - CLEARLOVE7`);
 
     }, []);
+
 
     return(
         <div className="home-container">

@@ -48,13 +48,6 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
 
     useEffect(() => {
 
-        navigate('/chat');
-        document.title = title;
-
-    }, [title]);
-
-    useEffect(() => {
-
         socketRef.current = socket;
 
     }, [socket]);

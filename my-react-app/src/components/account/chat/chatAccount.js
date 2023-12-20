@@ -24,7 +24,7 @@ function ChatAccount(props) {
     const [room, setRoom] = useState("");
     const navigate = useNavigate();
     const socketRef = useRef(socket);
-
+    const text = RenderEffect("Hãy nhập tên và chọn phòng!");
 
     useEffect(() => {
 
@@ -40,9 +40,6 @@ function ChatAccount(props) {
             socketRef.current.off(process.env.REACT_APP_JOIN_ROOM, handleUser);
         };
     }, []);
-
-
-    const text = RenderEffect("Hãy nhập tên và chọn phòng!");
 
     const joinRoom = function () {
 

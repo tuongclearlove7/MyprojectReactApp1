@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styles from "./loginStyle.module.css";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {toast} from "react-toastify";
 import Cookies from "js-cookie";
@@ -9,11 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToken, selectToken } from '../../redux/authSlice';
 import LoginMobileForm from "../../mobileComponents/auth/loginMobileForm";
 import {ReMoveStoreSuccess} from "../../feature/removeStore";
+import {UserContext} from "../../feature/UserContext";
 
 function Login(props){
 
     const [data, setData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
+    const { login } = useContext(UserContext);
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const navigate = useNavigate();
+    const hostname = process.env.REACT_APP_API_HOSTNAME;
     const notifyError = (text, time) => toast.error(text, {
 
         position: "top-center",
@@ -31,9 +36,10 @@ function Login(props){
     useEffect(() => {
 
         ReMoveStoreSuccess(localStorage.getItem("register_success"),2000, 2000);
-        document.title = props.title;
+        RedirectAccount();
+        setTitlePage(props.title);
 
-    }, []);
+    }, [props.title]);
 
     const handleChange = ({ currentTarget: input }) => {
 
@@ -46,18 +52,14 @@ function Login(props){
 
         try {
 
-            const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
+            const url = `${hostname}auth-api/login`;
             const { data: res } = await axios.post(url, data, {
                 headers: {
                     Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
             });
 
-            Cookies.set("token", res.data, { expires: Date.now() + 30000, path: "/" });
-            Cookies.set("username", res.username, { expires: Date.now() + 30000, path: "/" });
-            Cookies.set("email", res.email, { expires: Date.now() + 30000, path: "/" });
-            localStorage.setItem("username", res.username);
-            window.location = "/account";
+            login(res.username, res.email, res.data)
 
         } catch (error) {
 
@@ -66,7 +68,7 @@ function Login(props){
                 notifyError(error.response.data.message,2000)
             }
         }
-    };
+    }
 
     return(
         <div>

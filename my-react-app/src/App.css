@@ -28,6 +28,11 @@
     pointer-events: none;
 }
 
+.account-hidden{
+
+    display: none;
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {

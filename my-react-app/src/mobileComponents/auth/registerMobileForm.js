@@ -2,7 +2,6 @@ import React, {useRef, useEffect, useState} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from "styled-components";
-import {RedirectAccount} from "../../feature/redirectAccount";
 import styles from "../../components/auth/registerStyle.module.css";
 
 

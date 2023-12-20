@@ -1,10 +1,10 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, useContext} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import emailjs from "@emailjs/browser";
 import styled from "styled-components";
 import Swal from "sweetalert2";
-import {RedirectAccount} from "../../feature/redirectAccount";
+import {UserContext} from "../../feature/UserContext";
 
 //component
 function Contact(props){
@@ -13,11 +13,12 @@ function Contact(props){
     const [user_name, setUser_name] = useState("");
     const [email, setEmail] = useState("");
     const [msgEmail, setMsgEmail] = useState("");
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
 
     useEffect(() => {
 
         RedirectAccount();
-        document.title = props.title;
+        setTitlePage(props.title);
 
     }, [props.title]);
 

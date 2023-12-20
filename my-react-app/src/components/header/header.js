@@ -1,10 +1,11 @@
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 import {Reconnect} from "../../feature/reconntect";
 import Cookies from "js-cookie";
 import RenderEffect from "../../feature/renderEffect";
+import {UserContext} from "../../feature/UserContext";
 
 
 function Header(props) {
@@ -19,7 +20,6 @@ function Header(props) {
     const react = RenderEffect("React");
     const js = RenderEffect("Js");
 
-
     const leaveRoom = async () => {
 
         props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {r_m, u_m});
@@ -28,8 +28,11 @@ function Header(props) {
         await Reconnect(props.socket);
     };
 
+    const location = useLocation();
+    const isChatRoute = location.pathname === '/chat';
+
     return (
-        <div className={!username ? "header" : "header-hidden"}>
+        <div className={"header"}>
             <div className={"my-info"} style={{padding:"20px",}}>
                 <span className={"list-icon"}>
                      <li style={{listStyle:"none"}}>
@@ -56,14 +59,13 @@ function Header(props) {
                     <Link className="navbar-brand" to={"/home"} onClick={async ()=>{await leaveRoom();}}>
                         WEB-CHAT
                     </Link>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarScroll"
-                        aria-controls="navbarScroll"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+                    <button className="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarScroll"
+                            aria-controls="navbarScroll"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarScroll">
@@ -143,8 +145,8 @@ function Header(props) {
                     </div>
                 </div>
             </nav>
-            <ToastContainer />
-        </div>
+        <ToastContainer />
+    </div>
     );
 }
 

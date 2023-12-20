@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import Chat from "./chat";
 import io from 'socket.io-client';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
@@ -8,17 +8,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import RenderEffect from "../../feature/renderEffect";
 import Swal from "sweetalert2";
 import StatusLogin from "../../feature/statusLogin";
-import {RedirectAccount} from "../../feature/redirectAccount";
 import logo from "../../logo.svg";
+import {UserContext} from "../../feature/UserContext";
 
 
 function ChatContainer(props) {
 
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
     const navigate = useNavigate();
     const socketRef = useRef(props.socket);
-
     const notify = (text) => toast.error(text, {
 
         position: "top-center",
@@ -31,7 +31,8 @@ function ChatContainer(props) {
         theme: "light",
 
     });
-    const notifyWelcome = () => toast.info(`Xin chào, chào mừng bạn đến với trang chủ của WEB-CHAT.\nChúc bạn có trải nghiệm tốt nhất với website của tôi`, {
+    const notifyWelcome = () => toast.info(`Xin chào, chào mừng bạn đến với trang chủ của WEB-CHAT.\n
+    Chúc bạn có trải nghiệm tốt nhất với website của tôi`, {
 
         position: "top-center",
         autoClose: 900,
@@ -47,8 +48,8 @@ function ChatContainer(props) {
     useEffect(() => {
 
         RedirectAccount();
+        setTitlePage(props.title);
         notifyWelcome();
-        document.title = props.title;
 
     }, [props.title]);
 

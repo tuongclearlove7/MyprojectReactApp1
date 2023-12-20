@@ -1,35 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from "react-router-dom";
+import {UserContext} from "./UserContext";
 
 function StatusLogin(props){
 
-    const notifyErr = (text,time) => toast.error(text, {
-
-        position: "top-center",
-        autoClose: time,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-
-    });
-
+    const navigate = useNavigate();
+    const { logout } = useContext(UserContext);
     const token = Cookies.get('token');
     const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
-
-    const handleLogout = () => {
-
-        Cookies.remove('token');
-        Cookies.remove('username');
-        Cookies.remove('email');
-        localStorage.removeItem("username");
-        window.location = "/login";
-    };
 
     useEffect(() => {
 
@@ -51,7 +33,7 @@ function StatusLogin(props){
                 if (error.response && error.response.status >= 401) {
 
                     localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
-                    handleLogout();
+                    logout();
                 }
             }
         };
@@ -60,9 +42,7 @@ function StatusLogin(props){
 
     }, [url, token]);
 
-    return(
-        <></>
-    );
+    return <></>;
 }
 
 export default StatusLogin;

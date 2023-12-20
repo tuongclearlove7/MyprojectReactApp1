@@ -10,11 +10,6 @@ function CompanyItem(props) {
     const [companys, setCompanys] = useState([]);
     const hostname = `${process.env.REACT_APP_API_HOSTNAME}company-api`;
 
-    useEffect(() => {
-
-        document.title = props.title;
-    }, []);
-
 
     useEffect(() => {
 
