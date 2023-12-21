@@ -24,18 +24,14 @@ function Header(props) {
 
     useEffect(() => {
 
-        if(document.title === "ACCOUNT - CLEARLOVE7"){
-
-            setShowHeader(true);
-        }
-
         if (location.pathname === '/' ||
             location.pathname === '/home' ||
             location.pathname === '/chat' ||
             location.pathname === '/company' ||
             location.pathname === '/contact' ||
             location.pathname === '/login' ||
-            location.pathname === '/register') {
+            location.pathname === '/register' ||
+            document.title === "ACCOUNT - CLEARLOVE7") {
 
             setShowHeader(true);
         }

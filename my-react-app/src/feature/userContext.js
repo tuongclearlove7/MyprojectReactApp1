@@ -17,7 +17,7 @@ const UserProvider = ({ children }) => {
     const OnLocalStorage = async (on, key, value, dataKey, f) => {
 
         switch (on) {
-            
+
             case 'set':
                 localStorage.setItem(key, value);
                 break;
