@@ -24,11 +24,6 @@ function Header(props) {
 
     useEffect(() => {
 
-        if(!username){
-
-            setShowHeader(true);
-        }
-
         if (location.pathname === '/' ||
             location.pathname === '/home' ||
             location.pathname === '/chat' ||
@@ -42,6 +37,15 @@ function Header(props) {
         }
 
     }, [location.pathname]);
+
+    useEffect(() => {
+
+        if(!username){
+
+            setShowHeader(true);
+        }
+
+    }, [username]);
 
     const leaveRoom = async () => {
 
