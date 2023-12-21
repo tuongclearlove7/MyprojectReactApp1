@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import YoutubeItem from "./youtubeItem";
 import axios from "axios";
 import {UserContext} from "../../feature/UserContext";
+import {auth_name} from "../../model/secrectName";
 
 function Blog(props){
 
@@ -26,7 +27,7 @@ function Blog(props){
             try {
                 const response = await axios.get(hostname, {
                     headers: {
-                        Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+                        [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                     },
                 });
 

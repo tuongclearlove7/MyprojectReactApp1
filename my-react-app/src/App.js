@@ -4,7 +4,7 @@ import ScrollToTop from "react-scroll-to-top";
 import {youtubeData} from "./model/youtubeData";
 import {tableData} from "./model/tableData";
 import CompanyItem from "./components/company/companyItem";
-import YoutubeItem from "./components/youtube/youtubeItem";
+import YoutubeItem from "./components/blog/youtubeItem";
 import Toggle from "./components/state/toggle";
 import View from "./components/view/view";
 import Chat from "./components/chat/chat";
@@ -22,13 +22,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToken, selectToken } from './redux/authSlice';
 import io from 'socket.io-client';
 import Cookies from 'js-cookie';
-import Blog from "./components/youtube/blog";
+import Blog from "./components/blog/blog";
 import Account from "./components/account/account";
 import StatusLogin from "./feature/statusLogin";
 import {ReMoveStore} from "./feature/removeStore";
 import {toast} from "react-toastify";
 import {UserContext} from "./feature/UserContext";
 import {auth_name} from "./model/secrectName";
+
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     extraHeaders: {
         [auth_name] : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,

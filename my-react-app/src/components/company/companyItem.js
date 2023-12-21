@@ -3,6 +3,7 @@ import {tableData} from "../../model/tableData";
 import '../../App.css';
 import axios from "axios";
 import RenderEffect from "../../feature/renderEffect";
+import {auth_name} from "../../model/secrectName";
 
 function CompanyItem(props) {
 
@@ -17,7 +18,7 @@ function CompanyItem(props) {
             try {
                 const response = await axios.get(hostname, {
                     headers: {
-                        Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+                        [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                     },
                 });
 

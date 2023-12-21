@@ -7,7 +7,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import ChatContainer from "../chat/chatContainer";
 import Home from "../home/home";
 import Company from "../company/company";
-import Blog from "../youtube/blog";
+import Blog from "../blog/blog";
 import Contact from "../contact/contact";
 import Login from "../auth/login";
 import Register from "../auth/register";
