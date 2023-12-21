@@ -12,8 +12,42 @@ const UserProvider = ({ children }) => {
 
     const [myUser, setMyUser] = React.useState({username:null, auth: false});
     const navigate = useNavigate();
-
     const setTitlePage = title => document.title = title;
+
+    const OnLocalStorage = async (on, key, value, dataKey, f) => {
+
+        switch (on) {
+            
+            case 'set':
+                localStorage.setItem(key, value);
+                break;
+
+            case 'get':
+                return {[dataKey]: localStorage.getItem(key)};
+
+            case 'remove':
+                if (typeof f === "function") {
+                    await f();
+                    console.log("remove");
+                    localStorage.removeItem(key);
+                }
+                break;
+
+            default:
+                break;
+        }
+    };
+
+    const HandleLoading = async (page, setLoading, timeLoading)=>{
+
+        if(typeof setLoading === "function"){
+
+            setLoading(true);
+            await new Promise(resolve => setTimeout(resolve, timeLoading));
+            navigate(page)
+            setLoading(false);
+        }
+    }
 
     const RedirectAccount = () =>{
 
@@ -26,10 +60,9 @@ const UserProvider = ({ children }) => {
         }
     }
 
-    const GetStatusLogin = async (url, env, func)=>{
+    const GetStatusLogin = async (url, env, f)=>{
 
         try{
-
             const response = await axios.get(url, {
                 headers: {
                     [auth_name]: env,
@@ -38,27 +71,35 @@ const UserProvider = ({ children }) => {
 
             console.log(response);
 
-            if(typeof func === 'object'){
+            if(typeof f === 'object'){
 
-                console.log(func);
+                console.log(f);
             }
 
         }catch (error){
 
-            console.error("Error fetching data:", error);
+            console.warn("Error fetching data:", error.request);
 
-            if (typeof func === 'function') {
+            if (typeof f === 'function') {
 
-                func();
+                f();
 
             } else {
 
-                console.log(func);
+                console.log(f);
 
-                return func;
+                return f;
             }
         }
     }
+
+    const ExpiredLogin = () => {
+
+        localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
+        logout();
+        window.location="/login"
+
+    };
 
 
     const FetchAPI = async (hostname, setData, auth_name, env) =>{
@@ -76,7 +117,7 @@ const UserProvider = ({ children }) => {
 
         } catch (error) {
 
-            console.error("Error fetching data:", error);
+            console.warn("Error fetching data: ", error.request);
         }
     }
 
@@ -114,7 +155,11 @@ const UserProvider = ({ children }) => {
             RedirectAccount,
             setTitlePage,
             FetchAPI,
-            GetStatusLogin
+            GetStatusLogin,
+            ExpiredLogin,
+            HandleLoading,
+            OnLocalStorage
+
         }}>{children}
         </UserContext.Provider>
     );

@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import emailjs from "@emailjs/browser";
 import styled from "styled-components";
 import Swal from "sweetalert2";
-import {UserContext} from "../../feature/UserContext";
+import {UserContext} from "../../feature/userContext";
 
 //component
 function Contact(props){
@@ -17,7 +17,6 @@ function Contact(props){
 
     useEffect(() => {
 
-        RedirectAccount();
         setTitlePage(props.title);
 
     }, [props.title]);

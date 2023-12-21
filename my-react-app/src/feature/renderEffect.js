@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-function useRenderEffect(text) {
+function useRenderEffect(text, time) {
 
     const [displayText, setDisplayText] = useState('');
 
@@ -21,7 +21,7 @@ function useRenderEffect(text) {
 
             }
 
-        }, 30);
+        }, time);
 
         return () => clearInterval(intervalId);
 

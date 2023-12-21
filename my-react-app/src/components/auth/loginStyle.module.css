@@ -85,14 +85,25 @@
     padding: 12px 0;
     background-color: white;
     border-radius: 20px;
-    width: 180px;
+    width: 235px;
     font-weight: bold;
     font-size: 14px;
     cursor: pointer;
 }
 
 .green_btn {
-    background-color: #3bb19b;
-    color: white;
+    background-color: white;
+    color: black;
     margin: 10px;
+    border: 2px solid black;
+}
+
+.green_btn span{
+
+    display: block;
+}
+
+#rou_logo{
+
+    display: block;
 }

@@ -18,21 +18,10 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
     const [messageList, setMessageList] = useState([]);
     const [userJoinRoomList, setUserJoinRoomList] = useState([]);
     const [userLeaveRoomList, setUserLeaveRoomList] = useState([]);
+    const prevRoom = useRef(room);
+    const prevUsername = useRef(username);
     const navigate = useNavigate();
     const socketRef = useRef(socket);
-
-    const notify = (text, time) => toast.success(text, {
-
-        position: "top-center",
-        autoClose: time,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-
-    });
 
     const leaveRoom = async () => {
 
@@ -45,6 +34,24 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
         await Reconnect(socket);
 
     };
+
+    const confirmLeaveRoom = (f) => {
+
+        const confirm = window.confirm("Hỏi lại lần cuối bạn có muốn rời khỏi phòng không?");
+
+        if(confirm){
+            (async ()=>{
+
+                socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room, username });
+                navigate('/');
+                setShowChat(false);
+                setRoom("");
+                setUsername("");
+                socket.disconnect();
+                await Reconnect(socket);
+            })();
+        }
+    }
 
     useEffect(() => {
 
@@ -88,14 +95,7 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
 
         }else{
 
-            leaveRoom().then(res => {
-
-                console.log(res);
-
-            }).catch(error=>{
-
-                console.log(error)
-            });
+            leaveRoom().then(r=>r);
         }
     }, []);
 
@@ -169,10 +169,10 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
                     </span>
                 </div>
                 <div style={{padding:"10px", float:"right",}}>
-                    <span style={{ color: 'white', cursor: 'pointer' }}
-                        onClick={leaveRoom}>
-                        Rời phòng
-                    </span>
+                    <button style={{ color: 'black', cursor: 'pointer' }}
+                          onClick={confirmLeaveRoom}>
+                          Rời phòng
+                    </button>
                 </div>
             </div>
             <div className="chat-content">
@@ -182,18 +182,17 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
                             <div className={"list-user"}>
                                 <p id="user">Người dùng:</p>
                                 <ul>
-                                    {userList.length > 0 ? (
-                                        userList.map((data) => (
-                                            <li style={{ color: "white", listStyle: "none" }} key={data.id}>
-                                                <img src={logo} className="App-user-logo" alt="logo" />
-                                                {data.username}
-                                            </li>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p>No users available</p>
-                                        </div>
-                                    )}
+                                {userList.length > 0 ? (
+                                    userList.map((data) => (
+                                        <li style={{ color: "white", listStyle: "none" }} key={data.id}>
+                                            <img src={logo} className="App-user-logo" alt="logo" />
+                                            {data.username}
+                                        </li>
+                                    ))) : (
+                                    <div>
+                                        <p>No users available</p>
+                                    </div>
+                                )}
                                 </ul>
                             </div>
                         </div>

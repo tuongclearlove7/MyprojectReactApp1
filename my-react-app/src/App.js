@@ -27,7 +27,7 @@ import Account from "./components/account/account";
 import StatusLogin from "./feature/statusLogin";
 import {ReMoveStore} from "./feature/removeStore";
 import {toast} from "react-toastify";
-import {UserContext} from "./feature/UserContext";
+import {UserContext} from "./feature/userContext";
 import {auth_name} from "./model/secrectName";
 
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
@@ -55,8 +55,6 @@ function App() {
             GetStatusLogin
     } = useContext(UserContext);
 
-    GetStatusLogin(url,env,{["Current userr: "]:myUser}).then();
-
     useEffect(() => {
 
         if(user){
@@ -75,12 +73,14 @@ function App() {
         console.log("Socket connected");
     });
 
+    GetStatusLogin(url,env,{["Current userr: "]:myUser}).then();
     ReMoveStore("notify",2000,2000);
 
     return (
         <div className="App">
             <div className="container">
-                {!myUser.auth && (<Header u={u} r={r} user={user} socket={socket} setShowChat={setShowChat}/>)}
+                {/*{!myUser.auth && ()}*/}
+                <Header u={u} r={r} user={user} socket={socket} setShowChat={setShowChat}/>
                 <Routes>
                     <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST}
                     setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
@@ -89,7 +89,7 @@ function App() {
                     <Route path="/home" element={<Home title={`HOME - ${authorWebName}`} learn={`${authorWebName}`}/>}/>
                     <Route path="/account/*" exact element={<Account  socket_url={process.env.REACT_APP_API_LOCALHOST}
                     setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat}/>}/>
-                    <Route path="/account" element={<Account title={`ACCOUNT - ${authorWebName}`} exact element={<Home/>}/>}/>
+                    <Route path="/account" element={<Account title={`ACCOUNT - ${authorWebName}`} exact element={<Home/>}/> }/>
                     <Route path="/company" element={<Company  title={`COMPANY - ${authorWebName}`} />}/>
                     <Route path="/blog" element={<Blog  title={`BLOG - ${authorWebName}`} />}/>
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>

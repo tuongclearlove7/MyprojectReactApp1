@@ -166,8 +166,7 @@ function Chat(props){
                     </span>
                 </div>
                 <div style={{padding:"10px", float:"right",}}>
-                    <span style={{ color: 'white', cursor: 'pointer' }}
-                          onClick={leaveRoom}>
+                    <span style={{ color: 'white', cursor: 'pointer' }} onClick={leaveRoom}>
                         Rời phòng
                     </span>
                 </div>
@@ -180,16 +179,14 @@ function Chat(props){
                                 <p id="user">Người dùng:</p>
                                 <ul>
                                     {userList.length > 0 ? (
-                                        userList.map((data) => (
-                                            <li style={{ color: "white", listStyle: "none" }} key={data.id}>
-                                                <img src={logo} className="App-user-logo" alt="logo" />
-                                                {data.username}
-                                            </li>
-                                        ))
-                                    ) : (
-                                        <div>
-                                            <p>No users available</p>
-                                        </div>
+                                    userList.map((data) => (
+                                    <li style={{ color: "white", listStyle: "none" }} key={data.id}>
+                                        <img src={logo} className="App-user-logo" alt="logo" />
+                                        {data.username}
+                                    </li>))) : (
+                                    <div>
+                                        <p>No users available</p>
+                                    </div>
                                     )}
                                 </ul>
                             </div>

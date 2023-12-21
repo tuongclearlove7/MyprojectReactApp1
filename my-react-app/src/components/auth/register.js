@@ -4,12 +4,14 @@ import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {toast} from "react-toastify";
 import RegisterMobileForm from "../../mobileComponents/auth/registerMobileForm";
-import {UserContext} from "../../feature/UserContext";
+import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
 
 function Register(props){
 
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const [loadingLogin, setLoadingLogin] = useState(false);
+    const [loadingRegister, setLoadingRegister] = useState(false);
+    const { RedirectAccount, setTitlePage, HandleLoading} = useContext(UserContext);
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const [data, setData] = useState({
@@ -34,7 +36,6 @@ function Register(props){
 
     useEffect(() => {
 
-        RedirectAccount();
         setTitlePage(props.title);
 
     }, [props.title]);
@@ -50,14 +51,15 @@ function Register(props){
 
         try {
 
+            setLoadingRegister(true)
             const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/register/store`;
             const { data: res } = await axios.post(url, data, {
                 headers: {
                     [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
             });
-
-            localStorage.setItem("register_success", "Tạo tài khoản thành công")
+            localStorage.setItem("register_success", "Tạo tài khoản thành công");
+            await new Promise(resolve => setTimeout(resolve, 1000));
             window.location = "/login";
 
         }catch (error) {
@@ -65,9 +67,13 @@ function Register(props){
             if(error.response && error.response.status >= 400 && error.response.status <= 500){
 
                 console.log(error.response);
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 notifyError(error.response.data.message);
                 setError(error.response.data.message);
             }
+        }finally {
+
+            setLoadingRegister(false);
         }
     }
 
@@ -76,9 +82,16 @@ function Register(props){
                 <div className={styles.signup_form_container}>
                     <div className={styles.left}>
                         <h1>Đăng nhập ngay</h1>
-                        <Link to="/login">
+                        <Link onClick={()=>HandleLoading("/login", setLoadingLogin, 750)}>
                             <button type="button" className={styles.white_btn}>
-                                ĐĂNG NHẬP
+                                <span>
+                                    ĐĂNG NHẬP
+                                </span>
+                                {loadingLogin && (
+                                    <span style={{display:"block"}}>
+                                         <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                    </span>
+                                )}
                             </button>
                         </Link>
                     </div>
@@ -122,7 +135,14 @@ function Register(props){
                                 className={styles.input}
                             />
                             <button type="submit" className={styles.green_btn}>
-                                ĐĂNG KÝ
+                                <span>
+                                    ĐĂNG KÝ
+                                </span>
+                                {loadingRegister && (
+                                    <span style={{display:"block"}}>
+                                        <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                    </span>
+                                )}
                             </button>
                         </form>
                     </div>

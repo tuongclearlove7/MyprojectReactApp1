@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import CompanyItem from "../company/companyItem";
 import Header from "../header/header";
-import {UserContext} from "../../feature/UserContext";
+import {UserContext} from "../../feature/userContext";
 
 //component
 function Company(props){
@@ -10,7 +10,6 @@ function Company(props){
 
     useEffect(() => {
 
-        RedirectAccount();
         setTitlePage(props.title);
 
     }, [props.title]);

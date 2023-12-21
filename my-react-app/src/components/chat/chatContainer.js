@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import Chat from "./chat";
 import io from 'socket.io-client';
-import { Routes, Route, useNavigate, Link } from 'react-router-dom';
+import {Routes, Route, useNavigate, Link, useLocation} from 'react-router-dom';
 import { roomNameData } from "../../model/roomNameData";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,18 +9,21 @@ import RenderEffect from "../../feature/renderEffect";
 import Swal from "sweetalert2";
 import StatusLogin from "../../feature/statusLogin";
 import logo from "../../logo.svg";
-import {UserContext} from "../../feature/UserContext";
+import {UserContext} from "../../feature/userContext";
+import styles from "../auth/loginStyle.module.css";
 
 
 function ChatContainer(props) {
 
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const { RedirectAccount, setTitlePage, OnLocalStorage } = useContext(UserContext);
+    const [loadingPage, setLoadingPage] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
-    const navigate = useNavigate();
     const socketRef = useRef(props.socket);
+    const navigate = useNavigate();
+    const location = useLocation();
     const notify = (text) => toast.error(text, {
-
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -29,11 +32,8 @@ function ChatContainer(props) {
         draggable: true,
         progress: undefined,
         theme: "light",
-
     });
-    const notifyWelcome = () => toast.info(`Xin chào, chào mừng bạn đến với trang chủ của WEB-CHAT.\n
-    Chúc bạn có trải nghiệm tốt nhất với website của tôi`, {
-
+    const notifyWelcome = () => toast.info(`Xin chào, chào mừng bạn đến với trang chủ của WEB-CHAT.\nChúc bạn có trải nghiệm tốt nhất với website của tôi`, {
         position: "top-center",
         autoClose: 900,
         hideProgressBar: false,
@@ -42,16 +42,20 @@ function ChatContainer(props) {
         draggable: true,
         progress: undefined,
         theme: "light",
-
     });
+
+    const text = RenderEffect("Hãy nhập tên và chọn phòng!", 50);
 
     useEffect(() => {
 
-        RedirectAccount();
         setTitlePage(props.title);
-        notifyWelcome();
 
-    }, [props.title]);
+        if (location.pathname === '/chat') {
+
+            notifyWelcome();
+        }
+
+    }, [props.title, location.pathname]);
 
     useEffect(() => {
 
@@ -69,16 +73,38 @@ function ChatContainer(props) {
     }, []);
 
 
-    const text = RenderEffect("Hãy nhập tên và chọn phòng!");
+    useEffect(() => {
 
-    const joinRoom = function () {
+        onLoading().then(r => r);
+
+    }, []);
+
+    const onLoading = async () => {
+
+        setLoadingPage(true);
+
+        const wait = async () =>{
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        const data = await OnLocalStorage("get", "onLoading", "", "data");
+        console.log("LocalStorage data: ", data);
+        await OnLocalStorage("remove", "onLoading", "", "data", wait);
+
+        setLoadingPage(false);
+
+    };
+
+    const joinRoom = async () => {
 
         const invalid = /[@.!#$%^&*()_+=[\]{};'`:"\\|,<>/?]/;
         const space = 2;
         const spaceLimited = new RegExp(`\\s{${space},}`);
         const characters = username.split('');
         const num_char_limited = 16;
-
+        setLoading(true);
+        await new Promise(resolve => setTimeout(resolve, 1000));
         if (!username || !room) {
 
             notify('Vui lòng nhập vào tên của bạn và chọn phòng!');
@@ -126,25 +152,25 @@ function ChatContainer(props) {
                 }
             }
         }
+        setLoading(false);
     }
 
     return (
         <div>
+            {loadingPage ? (
+                <div className={"load-logo-center"}>
+                    <img src={logo} className="loading-logo-account" alt="logo" />
+                </div>
+            ) : (
+            <div>
+
             {!props.showChat ? (
                 <div className="joinChatContainer">
                     <h4 className={`render`}>
                         {text}
                     </h4>
-                    <header>
-                        <img src={logo} className="App-logo" alt="logo" />
-                    </header>
-                    <input
-                        type="text"
-                        placeholder="Nhập tên của bạn..."
-                        onChange={(event) => {
-                            setUsername(event.target.value);
-                        }}
-                    />
+                    <input type="text" placeholder="Nhập tên của bạn..."
+                     onChange={(event) => {setUsername(event.target.value);}}/>
                     <select
                         className="form-select"
                         aria-label="Default select example"
@@ -163,7 +189,16 @@ function ChatContainer(props) {
                             return null;
                         })}
                     </select>
-                    <button onClick={joinRoom}>VÀO PHÒNG</button>
+                    <button onClick={joinRoom}>
+                        <span>
+                            VÀO PHÒNG
+                        </span>
+                        {loading && (
+                            <span>
+                                 <img src={logo} className="App-loading-logo" alt="logo" />
+                            </span>
+                        )}
+                    </button>
                 </div>
                 ) : (
                     <div className="chat-container">
@@ -177,6 +212,8 @@ function ChatContainer(props) {
                         />
                     </div>
                 )}
+            </div>
+            )}
             <ToastContainer />
         </div>
     );

@@ -7,7 +7,7 @@ function YoutubeItem(props){
     return(
         <div >
             <h1 className="youtube-title">
-                <span>{RenderEffect(props.title)||null}</span>
+                <span>{RenderEffect(props.title, 30)||null}</span>
                 <span style={{color:props.colorLan}}>
                 </span>
                 <br/>

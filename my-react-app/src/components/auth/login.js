@@ -9,28 +9,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToken, selectToken } from '../../redux/authSlice';
 import LoginMobileForm from "../../mobileComponents/auth/loginMobileForm";
 import {ReMoveStoreSuccess} from "../../feature/removeStore";
-import {UserContext} from "../../feature/UserContext";
+import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
+import logo from "../../logo.svg";
 
 function Login(props){
 
     const [data, setData] = useState({ email: "", password: "" });
+    const [loadingLogin, setLoadingLogin] = useState(false);
+    const [loadingRegister, setLoadingRegister] = useState(false);
     const [error, setError] = useState("");
-    const { login } = useContext(UserContext);
+    const { login, HandleLoading } = useContext(UserContext);
     const { RedirectAccount, setTitlePage } = useContext(UserContext);
     const navigate = useNavigate();
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     const notifyError = (text, time) => toast.error(text, {
-
-        position: "top-center",
-        autoClose: time,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-
+            position: "top-center",
+            autoClose: time,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
     });
 
 
@@ -38,9 +39,14 @@ function Login(props){
 
         ReMoveStoreSuccess(localStorage.getItem("register_success"),2000, 2000);
         setTitlePage(props.title);
-        RedirectAccount();
 
     }, [props.title]);
+
+    const handleLoading = async ()=>{
+
+        HandleLoading("/register", setLoadingRegister, 700);
+    }
+
 
     const handleChange = ({ currentTarget: input }) => {
 
@@ -53,6 +59,7 @@ function Login(props){
 
         try {
 
+            setLoadingLogin(true);
             const url = `${hostname}auth-api/login`;
             const { data: res } = await axios.post(url, data, {
                 headers: {
@@ -60,15 +67,22 @@ function Login(props){
                 },
             });
 
+            await new Promise(resolve => setTimeout(resolve, 1000));
             login(res.username, res.email, res.data);
-            navigate("/account")
+            window.location="/account";
+            // navigate("/account");
 
         } catch (error) {
 
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
 
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 notifyError(error.response.data.message,2000);
             }
+        }
+        finally {
+
+            setLoadingLogin(false);
         }
     }
 
@@ -77,7 +91,7 @@ function Login(props){
             <div className="login-container">
                 <div className={styles.login_form_container}>
                     <div className={styles.left}>
-                        <form className={styles.form_container} onSubmit={handleSubmit}>
+                        <form className={styles.form_container} onSubmit={handleSubmit} >
                             <h1>ĐĂNG NHẬP TÀI KHOẢN</h1>
                             <input
                                 type="email"
@@ -98,17 +112,27 @@ function Login(props){
                                 className={styles.input}
                             />
                             <button type="submit" className={styles.green_btn}>
-                                ĐĂNG NHẬP
+                                <span>
+                                    ĐĂNG NHẬP
+                                </span>
+                                {loadingLogin && (
+                                    <span id={styles.rou_logo}>
+                                         <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                    </span>
+                                )}
                             </button>
                         </form>
                     </div>
                     <div className={styles.right}>
                         <h1>Đăng ký ngay</h1>
-                        <Link to="/register">
-                            <button type="button" className={styles.white_btn}>
-                                ĐĂNG KÝ
-                            </button>
-                        </Link>
+                        <button type="button" onClick={handleLoading} className={styles.white_btn}>
+                            ĐĂNG KÝ
+                            {loadingRegister && (
+                                <span id={styles.rou_logo}>
+                                     <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                </span>
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>

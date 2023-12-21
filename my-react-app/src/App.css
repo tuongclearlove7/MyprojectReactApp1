@@ -22,10 +22,62 @@
 
 }
 
+.App-btn-logo{
+
+    height: 3vmin;
+    pointer-events: none;
+
+}
 
 .App-chat-logo {
+
     height: 25vmin;
     pointer-events: none;
+}
+
+.loading-logo {
+
+    padding-top: 40px;
+    width: 150px;
+}
+
+.loading-logo-account {
+
+    width: 300px;
+}
+
+.load-logo-center{
+
+    clear: both;
+    padding-top: 80px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.App-loading-logo{
+    height: 3vmin;
+    pointer-events: none;
+}
+
+.has-not-user{
+
+    float: left;
+    text-align: center;
+    padding-top: 100px;
+    width: 100%;
+}
+
+.has-not-user a {
+
+    font-size: 25px;
+    font-family: Roboto Condensed;
+    text-decoration: none;
+}
+
+.account-container{
+
+    float: left;
+    width: 100%;
 }
 
 .account-hidden{
@@ -49,6 +101,23 @@
         animation: App-logo-spin infinite 5s linear;
 
     }
+    .App-btn-logo{
+        animation: App-logo-spin infinite 5s linear;
+
+    }
+
+    .loading-logo{
+        animation: App-logo-spin infinite 5s linear;
+
+    }
+    .loading-logo-account{
+        animation: App-logo-spin infinite 2s linear;
+
+    }
+    .App-loading-logo{
+        animation: App-logo-spin infinite 1s linear;
+
+    }
 }
 
 .App-header {
@@ -69,6 +138,8 @@
 }
 
 .App-link {
+
+    text-align: center;
     color: #61dafb;
 }
 
@@ -354,20 +425,21 @@ body {
 
 .joinChatContainer button {
     width: 210px;
-    height: 40px;
     display: block;
     margin: 10px auto;
     border: none;
     border-radius: 5px;
     padding: 5px;
     font-size: 16px;
-    background: #43a047;
-    color: #fff;
+    background: white;
+    border: 2px solid black;
+    color: black;
     cursor: pointer;
 }
 
 .joinChatContainer button:hover {
-    background: #2e7d32;
+    background: white;
+    color: black;
 }
 .chat-container {
     clear: both;
