@@ -24,6 +24,11 @@ function Header(props) {
 
     useEffect(() => {
 
+        if(!username){
+
+            setShowHeader(true);
+        }
+
         if (location.pathname === '/' ||
             location.pathname === '/home' ||
             location.pathname === '/chat' ||
