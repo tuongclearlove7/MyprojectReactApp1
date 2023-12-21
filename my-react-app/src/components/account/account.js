@@ -22,13 +22,13 @@ const Account = (props) => {
     const email = Cookies.get('email');
     const token = Cookies.get('token');
     const { logout } = useContext(UserContext);
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const { RedirectAccount, setTitlePage, myUser } = useContext(UserContext);
 
     useEffect(() => {
 
         if(!username){
 
-            setTitlePage("ACCOUNT - CLEARLOVE7");
+            setTitlePage(props.title);
 
         }else{
 
@@ -43,29 +43,30 @@ const Account = (props) => {
         if(confirmLogout){
 
             logout();
+            window.location="/login"
         }
     };
 
     return (
-        <div>{username && (
-            <div className={"account"}>
-                <StatusLogin />
-                <HeaderAccount  username={username} handleLogout={handleLogout} />
-                <div className="account-container">
-                    <Routes>
-                        <Route index element={<DashBoard />}/>
-                        <Route path="/chat"
-                           element={<ChatAccount
-                           socket_url={process.env.REACT_APP_API_LOCALHOST}
-                           setU={props.setU} setR={props.setR}
-                           socket={props.socket}
-                           showChat={props.showChat}
-                           setShowChat={props.setShowChat} />}
-                        />
-                        <Route path="/info" element={<Info email={email} username={username} />}/>
-                    </Routes>
+        <div>{myUser.auth && (
+                <div className={"account"}>
+                    <StatusLogin />
+                    <HeaderAccount  username={username} handleLogout={handleLogout} />
+                    <div className="account-container">
+                        <Routes>
+                            <Route index element={<DashBoard />}/>
+                            <Route path="/chat"
+                               element={<ChatAccount
+                               socket_url={process.env.REACT_APP_API_LOCALHOST}
+                               setU={props.setU} setR={props.setR}
+                               socket={props.socket}
+                               showChat={props.showChat}
+                               setShowChat={props.setShowChat} />}
+                            />
+                            <Route path="/info" element={<Info email={email} username={username} />}/>
+                        </Routes>
+                    </div>
                 </div>
-            </div>
             )}
         </div>
     );

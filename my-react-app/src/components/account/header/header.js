@@ -6,7 +6,7 @@ import {UserContext} from "../../../feature/UserContext";
 
 function HeaderAccount(props){
 
-    const { logout } = useContext(UserContext);
+    const { logout, myUser} = useContext(UserContext);
 
     return (
         <div className="header-account">

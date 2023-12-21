@@ -59,13 +59,14 @@ function Login(props){
                 },
             });
 
-            login(res.username, res.email, res.data)
+            login(res.username, res.email, res.data);
+            navigate("/account")
 
         } catch (error) {
 
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
 
-                notifyError(error.response.data.message,2000)
+                notifyError(error.response.data.message,2000);
             }
         }
     }

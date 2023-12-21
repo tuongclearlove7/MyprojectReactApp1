@@ -8,7 +8,7 @@ const UserContext = React.createContext({ username: '', auth: false });
 
 const UserProvider = ({ children }) => {
 
-    const [showHeader, setShowHeader] = React.useState(false);
+    const [myUser, setMyUser] = React.useState({username:"", auth: false});
     const navigate = useNavigate();
 
     const setTitlePage = (title) =>{
@@ -33,7 +33,11 @@ const UserProvider = ({ children }) => {
         Cookies.set("username", username, { expires: Date.now() + 30000, path: "/" });
         Cookies.set("email", email, { expires: Date.now() + 30000, path: "/" });
         localStorage.setItem("username", username);
-        window.location="/account"
+
+        setMyUser((myUser)=>({
+            username: username,
+            auth: true
+        }));
     };
 
     const logout = () => {
@@ -42,12 +46,16 @@ const UserProvider = ({ children }) => {
         Cookies.remove('username');
         Cookies.remove('email');
         localStorage.removeItem("username");
-        window.location="/login"
 
+        setMyUser((myUser)=>({
+            username: "",
+            auth: true
+        }));
     };
 
     return (
         <UserContext.Provider value={{
+            myUser,
             login,
             logout,
             RedirectAccount,

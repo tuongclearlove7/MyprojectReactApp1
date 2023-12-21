@@ -41,8 +41,19 @@ function App() {
     const [showChat, setShowChat] = useState(false);
     const [showHeader, setShowHeader] = useState(false);
     const user = Cookies.get('token');
+    const email = Cookies.get('email');
+    const username = Cookies.get('username');
     let [u, setU] = useState("");
     let [r, setR] = useState("");
+    const { RedirectAccount, setTitlePage, myUser,login } = useContext(UserContext);
+
+    useEffect(() => {
+
+        if(user){
+
+            login(username, email, user);
+        }
+    }, []);
 
     socket.on('connect_error', (error) => {
 
@@ -54,21 +65,22 @@ function App() {
         console.log("Socket connected");
     });
 
+    console.log(myUser)
     ReMoveStore("notify",2000,2000);
 
     return (
         <div className="App">
             <div className="container">
-                {!user && (<Header u={u} r={r} user={user} socket={socket} setShowChat={setShowChat}/>)}
+                {!myUser.auth && (<Header u={u} r={r} user={user} socket={socket} setShowChat={setShowChat}/>)}
                 <Routes>
                     <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST}
                     setU={setU} setR={setR} socket={socket} title={`HOME - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
                     <Route path="/chat" element={<ChatContainer  socket_url={process.env.REACT_APP_API_LOCALHOST}
                     setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat} />}/>
                     <Route path="/home" element={<Home title={`HOME - ${authorWebName}`} learn={`${authorWebName}`}/>}/>
-                    {user && <Route path="/account/*" exact element={<Account socket_url={process.env.REACT_APP_API_LOCALHOST}
-                    setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat}/>}/>}
-                    <Route path="/account" element={<Account exact element={<Home/>}/>}/>
+                    <Route path="/account/*" exact element={<Account  socket_url={process.env.REACT_APP_API_LOCALHOST}
+                    setU={setU} setR={setR}  socket={socket} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat}/>}/>
+                    <Route path="/account" element={<Account title={`ACCOUNT - ${authorWebName}`} exact element={<Home/>}/>}/>
                     <Route path="/company" element={<Company  title={`COMPANY - ${authorWebName}`} />}/>
                     <Route path="/blog" element={<Blog  title={`BLOG - ${authorWebName}`} />}/>
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>

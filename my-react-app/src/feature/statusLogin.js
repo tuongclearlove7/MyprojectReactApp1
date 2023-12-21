@@ -34,6 +34,7 @@ function StatusLogin(props){
 
                     localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
                     logout();
+                    window.location="/login";
                 }
             }
         };
