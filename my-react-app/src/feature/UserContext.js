@@ -11,10 +11,7 @@ const UserProvider = ({ children }) => {
     const [myUser, setMyUser] = React.useState({username:"", auth: false});
     const navigate = useNavigate();
 
-    const setTitlePage = (title) =>{
-
-        document.title = title;
-    }
+    const setTitlePage = title => document.title = title;
 
     const RedirectAccount = () =>{
 
@@ -59,7 +56,7 @@ const UserProvider = ({ children }) => {
             login,
             logout,
             RedirectAccount,
-            setTitlePage
+            setTitlePage,
         }}>{children}
         </UserContext.Provider>
     );
