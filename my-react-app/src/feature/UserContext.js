@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
 
 
-const UserContext = React.createContext({ username: '', auth: false });
+const UserContext = React.createContext({ username: null, auth: false });
 
 const UserProvider = ({ children }) => {
 
@@ -36,7 +36,7 @@ const UserProvider = ({ children }) => {
 
         setMyUser((myUser)=>({
             username: username,
-            auth: true
+            auth: true,
         }));
     };
 
@@ -48,8 +48,8 @@ const UserProvider = ({ children }) => {
         localStorage.removeItem("username");
 
         setMyUser((myUser)=>({
-            username: "",
-            auth: true
+            username: null,
+            auth: true,
         }));
     };
 

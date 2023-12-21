@@ -65,7 +65,7 @@ function App() {
         console.log("Socket connected");
     });
 
-    console.log(myUser)
+    console.log("Current user",myUser)
     ReMoveStore("notify",2000,2000);
 
     return (
