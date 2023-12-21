@@ -28,10 +28,10 @@ import StatusLogin from "./feature/statusLogin";
 import {ReMoveStore} from "./feature/removeStore";
 import {toast} from "react-toastify";
 import {UserContext} from "./feature/UserContext";
-
+import {auth_name} from "./model/secrectName";
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     extraHeaders: {
-        Authorization : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+        [auth_name] : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
     },
 });
 

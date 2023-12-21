@@ -11,9 +11,11 @@ import StatusLogin from "../../../feature/statusLogin";
 import Cookies from "js-cookie";
 import {Reconnect} from "../../../feature/reconntect";
 import logo from "../../../logo.svg";
+import {auth_name} from "../../../model/secrectName";
+
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     extraHeaders: {
-        Authorization : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+        [auth_name] : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
     },
 });
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import {toast} from "react-toastify";
 import RegisterMobileForm from "../../mobileComponents/auth/registerMobileForm";
 import {UserContext} from "../../feature/UserContext";
+import {auth_name} from "../../model/secrectName";
 
 function Register(props){
 
@@ -52,7 +53,7 @@ function Register(props){
             const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/register/store`;
             const { data: res } = await axios.post(url, data, {
                 headers: {
-                    Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+                    [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
             });
             localStorage.setItem("register_success", "Tạo tài khoản thành công")

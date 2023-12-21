@@ -10,6 +10,7 @@ import { setToken, selectToken } from '../../redux/authSlice';
 import LoginMobileForm from "../../mobileComponents/auth/loginMobileForm";
 import {ReMoveStoreSuccess} from "../../feature/removeStore";
 import {UserContext} from "../../feature/UserContext";
+import {auth_name} from "../../model/secrectName";
 
 function Login(props){
 
@@ -55,7 +56,7 @@ function Login(props){
             const url = `${hostname}auth-api/login`;
             const { data: res } = await axios.post(url, data, {
                 headers: {
-                    Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+                    [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
             });
 
