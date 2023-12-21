@@ -56,13 +56,12 @@ const Account = (props) => {
                         <Routes>
                             <Route index element={<DashBoard />}/>
                             <Route path="/chat"
-                               element={<ChatAccount
-                               socket_url={process.env.REACT_APP_API_LOCALHOST}
-                               setU={props.setU} setR={props.setR}
-                               socket={props.socket}
-                               showChat={props.showChat}
-                               setShowChat={props.setShowChat} />}
-                            />
+                                   element={<ChatAccount
+                                   socket_url={process.env.REACT_APP_API_LOCALHOST}
+                                   setU={props.setU} setR={props.setR}
+                                   socket={props.socket}
+                                   showChat={props.showChat}
+                                   setShowChat={props.setShowChat} />}/>
                             <Route path="/info" element={<Info email={email} username={username} />}/>
                         </Routes>
                     </div>

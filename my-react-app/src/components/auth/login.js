@@ -37,8 +37,8 @@ function Login(props){
     useEffect(() => {
 
         ReMoveStoreSuccess(localStorage.getItem("register_success"),2000, 2000);
-        RedirectAccount();
         setTitlePage(props.title);
+        RedirectAccount();
 
     }, [props.title]);
 

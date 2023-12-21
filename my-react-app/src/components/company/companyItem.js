@@ -1,36 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {tableData} from "../../model/tableData";
 import '../../App.css';
 import axios from "axios";
 import RenderEffect from "../../feature/renderEffect";
 import {auth_name} from "../../model/secrectName";
+import {UserContext} from "../../feature/UserContext";
 
 function CompanyItem(props) {
 
     //state
     const [companys, setCompanys] = useState([]);
     const hostname = `${process.env.REACT_APP_API_HOSTNAME}company-api`;
+    const {FetchAPI } = useContext(UserContext);
 
 
     useEffect(() => {
 
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(hostname, {
-                    headers: {
-                        [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
-                    },
-                });
-
-                setCompanys(response.data);
-
-            } catch (error) {
-
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData().then();
+        const env = `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`
+        FetchAPI(hostname, setCompanys, auth_name, env).then();
 
     }, []);
 

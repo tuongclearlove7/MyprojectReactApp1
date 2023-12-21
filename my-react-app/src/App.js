@@ -38,6 +38,7 @@ const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
 
 function App() {
 
+    const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
     const authorWebName = "CLEARLOVE7";
     const [showChat, setShowChat] = useState(false);
     const [showHeader, setShowHeader] = useState(false);
@@ -46,7 +47,15 @@ function App() {
     const username = Cookies.get('username');
     let [u, setU] = useState("");
     let [r, setR] = useState("");
-    const { RedirectAccount, setTitlePage, myUser,login } = useContext(UserContext);
+    const env = `${process.env.REACT_APP_AUTH_METHOD} ${user}`;
+    const { RedirectAccount,
+            setTitlePage,
+            myUser,
+            login,
+            GetStatusLogin
+    } = useContext(UserContext);
+
+    GetStatusLogin(url,env,{["Current userr: "]:myUser}).then();
 
     useEffect(() => {
 
@@ -66,7 +75,6 @@ function App() {
         console.log("Socket connected");
     });
 
-    console.log("Current user",myUser)
     ReMoveStore("notify",2000,2000);
 
     return (

@@ -9,38 +9,20 @@ import {UserContext} from "./UserContext";
 function StatusLogin(props){
 
     const navigate = useNavigate();
-    const { logout } = useContext(UserContext);
     const token = Cookies.get('token');
+    const {GetStatusLogin , logout} = useContext(UserContext);
     const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/login`;
 
     useEffect(() => {
 
-        const fetchData = async () => {
+        const env = `${process.env.REACT_APP_AUTH_METHOD} ${token}`;
+        GetStatusLogin(url, env, ()=>{
 
-            try {
-                const response = await axios.get(url, {
-                    headers: {
-                        Authorization: `${process.env.REACT_APP_AUTH_METHOD} ${token}`,
-                    },
-                });
+            localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
+            logout();
+            window.location="/login"
 
-                console.log(response);
-
-            } catch (error) {
-
-                console.error("Error fetching data:", error);
-
-                if (error.response && error.response.status >= 401) {
-
-                    localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
-                    logout();
-                    window.location="/login";
-                }
-            }
-        };
-
-        fetchData().then(r => console.log(r));
-
+        }).then();
     }, [url, token]);
 
     return <></>;

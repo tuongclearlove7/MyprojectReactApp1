@@ -11,7 +11,7 @@ function Blog(props){
     const author = "TuongClearlove7.";
     const title = ``;
     const hostname = `${process.env.REACT_APP_API_HOSTNAME}blog-api`;
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const { RedirectAccount, setTitlePage, FetchAPI} = useContext(UserContext);
 
     useEffect(() => {
 
@@ -23,23 +23,8 @@ function Blog(props){
 
     useEffect(() => {
 
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(hostname, {
-                    headers: {
-                        [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
-                    },
-                });
-
-                setBlogs(response.data);
-
-            } catch (error) {
-
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData().then();
+        const env = `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`
+        FetchAPI(hostname, setBlogs, auth_name, env).then();
 
     }, []);
 
@@ -51,13 +36,13 @@ function Blog(props){
                     return(
                         <div key={index}>
                             <YoutubeItem title={item.title || "Không tìm thấy dữ liệu"}
-                                         colorLan={"#26C6DA" || "Không tìm thấy dữ liệu"}
-                                         image={item.image || "Không tìm thấy dữ liệu"}
-                                         author={item.author || "Không tìm thấy dữ liệu"}
-                                         content={item.content || "Không tìm thấy dữ liệu"}
-                                         slug={`https://react.dev/` || "Không tìm thấy dữ liệu"}
-                                         index={(index+1) || "Không tìm thấy dữ liệu"}
-                                         createdAT={item.createdAt || "Không tìm thấy dữ liệu"}
+                             colorLan={"#26C6DA" || "Không tìm thấy dữ liệu"}
+                             image={item.image || "Không tìm thấy dữ liệu"}
+                             author={item.author || "Không tìm thấy dữ liệu"}
+                             content={item.content || "Không tìm thấy dữ liệu"}
+                             slug={`https://react.dev/` || "Không tìm thấy dữ liệu"}
+                             index={(index+1) || "Không tìm thấy dữ liệu"}
+                             createdAT={item.createdAt || "Không tìm thấy dữ liệu"}
                             />
                         </div>
                     );

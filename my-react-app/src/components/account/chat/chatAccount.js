@@ -57,8 +57,7 @@ function ChatAccount(props) {
                     <header className="App-chat-logo">
                         <img src={logo} className="App-logo" alt="logo" />
                     </header>
-                    <select
-                        className="form-select"
+                    <select className="form-select"
                         aria-label="Default select example"
                         onChange={(event) => {
                             setRoom(event.target.value);
@@ -77,16 +76,16 @@ function ChatAccount(props) {
                     </select>
                     <button onClick={joinRoom}>VÀO PHÒNG</button>
                 </div>
-            ) : (
-                <div className="chat-container">
-                    <Chat socket={socket}
+                ) : (
+                    <div className="chat-container">
+                        <Chat socket={socket}
                           username={username}
                           room={room}
                           setShowChat={setShowChat}
                           setRoom={setRoom}
-                    />
-                </div>
-            )}
+                        />
+                    </div>
+                )}
             <ToastContainer />
         </div>
     );

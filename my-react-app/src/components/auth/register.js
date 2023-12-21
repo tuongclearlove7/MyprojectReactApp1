@@ -56,9 +56,9 @@ function Register(props){
                     [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
             });
+
             localStorage.setItem("register_success", "Tạo tài khoản thành công")
             window.location = "/login";
-            console.log("register now");
 
         }catch (error) {
 
