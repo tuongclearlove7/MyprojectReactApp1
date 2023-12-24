@@ -9,7 +9,7 @@ function Weather(props) {
 
     const [loading, setLoading] = useState(false);
     const [weathers, setWeathers] = useState([]);
-    const hostname = `${process.env.REACT_APP_API_LOCALHOST}weather-api`;
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}weather-api`;
     const {OnLocalStorage} = useContext(UserContext);
 
     useEffect( () => {
