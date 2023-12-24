@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import RegisterMobileForm from "../../mobileComponents/auth/registerMobileForm";
 import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
+import loading_img from "../../loading.gif";
 
 function Register(props){
 
@@ -89,7 +90,7 @@ function Register(props){
                                 </span>
                                 {loadingLogin && (
                                     <span style={{display:"block"}}>
-                                         <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                         <img src={loading_img} className="App-user-logo" alt="logo" />
                                     </span>
                                 )}
                             </button>
@@ -140,7 +141,7 @@ function Register(props){
                                 </span>
                                 {loadingRegister && (
                                     <span style={{display:"block"}}>
-                                        <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                        <img src={loading_img} className="App-user-logo" alt="logo" />
                                     </span>
                                 )}
                             </button>

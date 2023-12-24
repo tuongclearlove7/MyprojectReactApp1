@@ -17,6 +17,8 @@ import DashBoard from "./dashboard/dashboard";
 import {UserContext} from "../../feature/userContext";
 import styles from "../auth/loginStyle.module.css";
 import logo from "../../logo.svg";
+import loading_img from "../../loading.gif";
+
 
 const Account = (props) => {
 
@@ -71,7 +73,6 @@ const Account = (props) => {
 
     };
 
-
     const handleLogout = () => {
 
         const confirmLogout = window.confirm('Bạn có chắc chắn muốn đăng xuất?');
@@ -98,8 +99,9 @@ const Account = (props) => {
                                 <span>Vui lòng đăng nhập vào tài khoản!</span>
                                 {loadingLogin && (
                                 <span id={styles.rou_logo}>
-                                  <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="loading-logo" alt="logo"/>
-                                </span>)}
+                                  <img src={loading_img} className="loading-logo" alt="logo"/>
+                                </span>)
+                                }
                             </Link>
                         </div>
                         )}

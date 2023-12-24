@@ -154,6 +154,11 @@ function Header(props) {
                                                     TÀI KHOẢN
                                                 </Link>
                                             </li>
+                                            <li>
+                                                <Link className="dropdown-item" onClick={async ()=>{onSetLocalStorage("/weather"); await leaveRoom();}} to={"weather"}>
+                                                    THỜI TIẾT
+                                                </Link>
+                                            </li>
                                         </ul>
                                     </li>
 

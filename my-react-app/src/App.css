@@ -654,6 +654,12 @@ body {
     }
 }
 
+.weather-container{
+
+    float: left;
+    padding-top: 70px;
+}
+
 @media (max-width: 950px) {
 
 

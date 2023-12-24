@@ -12,6 +12,8 @@ import {ReMoveStoreSuccess} from "../../feature/removeStore";
 import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
 import logo from "../../logo.svg";
+import loading_img from "../../loading.gif";
+
 
 function Login(props){
 
@@ -117,7 +119,7 @@ function Login(props){
                                 </span>
                                 {loadingLogin && (
                                     <span id={styles.rou_logo}>
-                                         <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                         <img src={loading_img} className="App-user-logo" alt="logo" />
                                     </span>
                                 )}
                             </button>
@@ -129,7 +131,7 @@ function Login(props){
                             ĐĂNG KÝ
                             {loadingRegister && (
                                 <span id={styles.rou_logo}>
-                                     <img src={"https://media.tenor.com/JeNT_qdjEYcAAAAj/loading.gif"} className="App-user-logo" alt="logo" />
+                                     <img src={loading_img} className="App-user-logo" alt="logo" />
                                 </span>
                             )}
                         </button>

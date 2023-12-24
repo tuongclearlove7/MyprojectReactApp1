@@ -5,15 +5,18 @@ import emailjs from "@emailjs/browser";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import {UserContext} from "../../feature/userContext";
+import loading_img from "../../loading.gif";
+import styles from "../auth/loginStyle.module.css";
 
-//component
+
 function Contact(props){
 
 
+    const [loadingSendMail, setLoadingSendMail] = useState(false);
+    const { RedirectAccount, setTitlePage } = useContext(UserContext);
     const [user_name, setUser_name] = useState("");
     const [email, setEmail] = useState("");
     const [msgEmail, setMsgEmail] = useState("");
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
 
     useEffect(() => {
 
@@ -49,9 +52,11 @@ function Contact(props){
 
     });
 
-    const sendEmail = (e) => {
+    const sendEmail = async (e) => {
 
         e.preventDefault();
+        setLoadingSendMail(true);
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
         if (!user_name || !email || !msgEmail) {
 
@@ -83,25 +88,29 @@ function Contact(props){
 
                     }else{
 
-                        emailjs.sendForm(
-                            process.env.REACT_APP_SERVICE_EMAIL_ID,
+                        emailjs.sendForm(process.env.REACT_APP_SERVICE_EMAIL_ID,
                             process.env.REACT_APP_TEMPLATE_EMAIL_ID,
                             form.current, process.env.REACT_APP_PUBLIC_KEY_EMAIL
-                        ).then((result) => {
+                        ).then(async (result) => {
 
+                                setLoadingSendMail(true);
                                 console.log(result.text);
                                 notifySuccess("Cảm ơn bạn đã gửi email cho tôi. Tôi sẽ liên hệ lại sớm nhất có thể!");
-
-                            }, (error) => {
-
-                                notifyError("Gửi Email lỗi!");
-                                console.log(error.text);
                             }
-                        );
+                        ).catch((error) => {
+
+                            notifyError("Gửi Email lỗi!");
+                            console.log(error.text);
+
+                        }).finally(()=>{
+
+                            setLoadingSendMail(false);
+                        });
                     }
                 }
             }
         }
+        setLoadingSendMail(false);
     };
 
     return (
@@ -132,7 +141,14 @@ function Contact(props){
                                   onChange={(event) => {
                                       setMsgEmail(event.target.value);
                                   }}/>
-                        <input type="submit" value="Gửi" />
+                        <button type={"submit"}>
+                            <span>Gửi</span>
+                            {loadingSendMail && (
+                                <span style={{padding:"7px 5px"}}>
+                                     <img src={loading_img} className="App-user-logo" alt="logo" />
+                                </span>
+                            )}
+                        </button>
                     </form>
                 </StyledContactForm>
             </div>
@@ -191,6 +207,19 @@ const StyledContactForm = styled.div`
       background: rgb(249, 105, 14);
       color: white;
       border: none;
+    }
+    
+    button{
+    
+     margin-top: 2rem;
+      cursor: pointer;
+      background: rgb(249, 105, 14);
+      color: white;
+      border: none;
+      width:100%;
+      border-radius:5px;
+      
+    
     }
   }
 `;

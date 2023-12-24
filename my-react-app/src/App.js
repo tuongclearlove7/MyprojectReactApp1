@@ -29,6 +29,7 @@ import {ReMoveStore} from "./feature/removeStore";
 import {toast} from "react-toastify";
 import {UserContext} from "./feature/userContext";
 import {auth_name} from "./model/secrectName";
+import Weather from "./components/weather/weather";
 
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     extraHeaders: {
@@ -95,6 +96,8 @@ function App() {
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>
                     <Route path="/login" element={<Login  title={`LOGIN - ${authorWebName}`} />}/>
                     <Route path="/register" element={<Register  title={`REGISTER - ${authorWebName}`} />}/>
+                    <Route path="/weather" element={<Weather  title={`WEATHER - ${authorWebName}`} />}/>
+
                 </Routes>
                 <ScrollToTop smooth color="#6f00ff" />
                 <Footer/>
