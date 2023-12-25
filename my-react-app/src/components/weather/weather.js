@@ -42,22 +42,25 @@ function Weather(props) {
 
     const onLoading = async () => {
 
-        setLoading(true);
+        const wait = async () => {
 
-        const wait = async () =>{
+            const timer = 2000;
+            const interval = 1000;
 
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            for (let i = 0; i < timer / interval; i++) {
+
+                await new Promise(resolve => setTimeout(resolve, interval));
+                console.log(`wait ${(i + 1) * interval / 1000}s`);
+            }
         }
 
+        setLoading(true);
         const data = await OnLocalStorage("get", "onLoading", "", "data");
         console.log("LocalStorage data: ", data);
         await OnLocalStorage("remove", "onLoading", "", "data", wait);
         setLoading(false);
 
     };
-
-    console.log(weathers);
-
 
     return (
         <div className={"weather-container"}>
@@ -75,7 +78,7 @@ function Weather(props) {
                                     <div className={"load-logo-center"}>
                                         <img src={logo} className="loading-logo-account" alt="logo" />
                                     </div>
-                                ) : (
+                                    ) : (
                                     <div>
                                         <h4 className="mb-0">
                                             {weathers && weathers.sys && weathers.sys.country && `Juneau, ${weathers.name === "Turan" && "Da Nang"}, ${weathers.sys.country}`}

@@ -15,9 +15,6 @@ function DashBoard(props){
                 <p>
                     {username ? username.toUpperCase() : "Không có thông tin!"}
                 </p>
-                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-                    Học phân tử khối electron cùng TUONGCLEARLOVE7
-                </a>
             </header>
         </div>
     );

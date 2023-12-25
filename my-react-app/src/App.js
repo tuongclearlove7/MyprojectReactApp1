@@ -75,7 +75,6 @@ function App() {
     });
 
     GetStatusLogin(url,env,{["Current userr: "]:myUser}).then();
-    ReMoveStore("notify",2000,2000);
 
     return (
         <div className="App">

@@ -21,18 +21,14 @@ const UserProvider = ({ children }) => {
             case 'set':
                 localStorage.setItem(key, value);
                 break;
-
             case 'get':
                 return {[dataKey]: localStorage.getItem(key)};
-
             case 'remove':
                 if (typeof f === "function") {
                     await f();
-                    console.log("remove");
-                    localStorage.removeItem(key);
                 }
+                localStorage.removeItem(key);
                 break;
-
             default:
                 break;
         }
@@ -143,7 +139,7 @@ const UserProvider = ({ children }) => {
 
         setMyUser((myUser)=>({
             username: null,
-            auth: true,
+            auth: false,
         }));
     };
 
@@ -158,7 +154,7 @@ const UserProvider = ({ children }) => {
             GetStatusLogin,
             ExpiredLogin,
             HandleLoading,
-            OnLocalStorage
+            OnLocalStorage,
 
         }}>{children}
         </UserContext.Provider>

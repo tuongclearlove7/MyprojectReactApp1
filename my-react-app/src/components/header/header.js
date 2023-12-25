@@ -108,8 +108,7 @@ function Header(props) {
                                                 onSetLocalStorage("/");
                                                 await leaveRoom();
                                             }
-                                        }
-                                        >
+                                        }>
                                             TRANG CHỦ
                                         </Link>
                                     </li>

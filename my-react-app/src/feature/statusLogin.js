@@ -18,6 +18,7 @@ function StatusLogin(props){
 
         const env = `${process.env.REACT_APP_AUTH_METHOD} ${token}`;
         GetStatusLogin(url, env, ExpiredLogin).then();
+
     }, [url, token]);
 
     return <></>;

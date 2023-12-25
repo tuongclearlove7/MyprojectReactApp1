@@ -85,6 +85,25 @@
     display: none;
 }
 
+#countdown {
+    float: left;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    font-size: 30px;
+    color: black;
+    top: 390px;
+}
+.countdown-before{
+
+    color: red;
+    padding-left: 10px;
+}
+
+.countdown-after{
+    padding-left: 5px;
+    color: #00d000;
+}
 
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {
@@ -645,6 +664,7 @@ body {
 }
 
 @media (min-width: 951px) {
+
     .login-mobile-container {
         display: none;
     }
@@ -652,6 +672,8 @@ body {
     .register-mobile-container {
         display: none;
     }
+
+
 }
 
 .weather-container{
@@ -690,6 +712,16 @@ body {
         padding-top: 50px;
         clear: both;
         display: block;
+    }
+
+    #countdown {
+        float: left;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        font-size: 20px;
+        color: black;
+        top: 390px;
     }
 
 }

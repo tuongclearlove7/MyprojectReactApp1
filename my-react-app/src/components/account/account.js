@@ -19,17 +19,34 @@ import styles from "../auth/loginStyle.module.css";
 import logo from "../../logo.svg";
 import loading_img from "../../loading.gif";
 
-
 const Account = (props) => {
 
     const [loadingLogin, setLoadingLogin] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [renderMyUser, setRenderMyUser] = React.useState({username:null, status: false});
+    const [loading, setLoading] = useState(false);
+    const [countdown, setCountdown] = useState(0);
     const { logout } = useContext(UserContext);
-    const { RedirectAccount, OnLocalStorage, HandleLoading, setTitlePage, myUser } = useContext(UserContext);
+    const { ExpiredLogin,OnLocalStorage, HandleLoading, setTitlePage, myUser } = useContext(UserContext);
     const username = Cookies.get('username');
     const email = Cookies.get('email');
     const token = Cookies.get('token');
+    const navigate = useNavigate();
+    const timer = 61000;
+
+
+    useEffect(() => {
+
+        const intervalId = setInterval(() => {
+
+            setCountdown(prevCountdown => {
+
+                return prevCountdown + 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
 
     useEffect(() => {
 
@@ -54,18 +71,51 @@ const Account = (props) => {
     useEffect(() => {
 
         onLoading().then(r => r);
+        countDownLogin().then();
 
     }, []);
 
+    const countDownLogin = async ()=>{
+
+        if(myUser.auth !== true){
+
+            if(localStorage.getItem("onLogin")){
+
+                const wait = async () => {
+
+                    const interval = 1000;
+
+                    for (let i = 0; i < timer / interval; i++) {
+
+                        await new Promise(resolve => setTimeout(resolve, interval));
+                        const countdown = (i + 1) * interval / 1000;
+                        console.log(`wait ${countdown}s`);
+                    }
+
+                    localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
+                    logout();
+                    navigate("/login");
+                }
+
+                await OnLocalStorage("remove", "onLogin", "", "data", wait);
+            }
+        }
+    }
+
     const onLoading = async () => {
 
-        setLoading(true);
+        const wait = async () => {
 
-        const wait = async () =>{
+            const timer = 1000;
+            const interval = 1000;
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            for (let i = 0; i < timer / interval; i++) {
+                await new Promise(resolve => setTimeout(resolve, interval));
+                console.log(`wait ${(i + 1) * interval / 1000}s`);
+            }
         }
 
+        setLoading(true);
         const data = await OnLocalStorage("get", "onLoading", "", "data");
         console.log("LocalStorage data: ", data);
         await OnLocalStorage("remove", "onLoading", "", "data", wait);
@@ -79,6 +129,7 @@ const Account = (props) => {
 
         if(confirmLogout){
 
+            OnLocalStorage("remove", "onLogin", "", "data");
             logout();
             window.location="/login"
         }
@@ -114,6 +165,19 @@ const Account = (props) => {
                 <div className={"account"}>
                     <StatusLogin />
                     <HeaderAccount username={username} handleLogout={handleLogout} />
+                    <h1 id={"countdown"}>
+                        <div className={"App-link"}>
+                             <span>
+                                Bạn sẽ hết hạn đăng nhập sau {timer/1000} giây
+                             </span>
+                             <span className={countdown < 50 ? "countdown-after" : "countdown-before"}>
+                                {countdown}
+                             </span>
+                             <span>
+                                s
+                             </span>
+                        </div>
+                    </h1>
                     <div className="account-container">
                         <Routes>
                             <Route index element={<DashBoard />} />
@@ -133,5 +197,6 @@ const Account = (props) => {
         </div>
     );
 };
+
 
 export default Account;

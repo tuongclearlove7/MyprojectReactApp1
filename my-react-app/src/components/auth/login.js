@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken, selectToken } from '../../redux/authSlice';
 import LoginMobileForm from "../../mobileComponents/auth/loginMobileForm";
-import {ReMoveStoreSuccess} from "../../feature/removeStore";
+import {ReMoveStore, ReMoveStoreSuccess} from "../../feature/removeStore";
 import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
 import logo from "../../logo.svg";
@@ -22,7 +22,7 @@ function Login(props){
     const [loadingRegister, setLoadingRegister] = useState(false);
     const [error, setError] = useState("");
     const { login, HandleLoading } = useContext(UserContext);
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const { OnLocalStorage,RedirectAccount, setTitlePage } = useContext(UserContext);
     const navigate = useNavigate();
     const hostname = process.env.REACT_APP_API_HOSTNAME;
     const notifyError = (text, time) => toast.error(text, {
@@ -39,6 +39,7 @@ function Login(props){
 
     useEffect(() => {
 
+        ReMoveStore("notify",2000,2000);
         ReMoveStoreSuccess(localStorage.getItem("register_success"),2000, 2000);
         setTitlePage(props.title);
 
@@ -54,6 +55,12 @@ function Login(props){
 
         setData({ ...data, [input.name]: input.value });
     };
+
+    const onSetLocalStorage=(page)=>{
+
+        OnLocalStorage("set","onLogin", true, "data");
+        window.location=page;
+    }
 
     const handleSubmit = async (e) => {
 
@@ -71,7 +78,7 @@ function Login(props){
 
             await new Promise(resolve => setTimeout(resolve, 1000));
             login(res.username, res.email, res.data);
-            window.location="/account";
+            onSetLocalStorage("/account");
             // navigate("/account");
 
         } catch (error) {
