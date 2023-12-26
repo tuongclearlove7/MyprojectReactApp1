@@ -25,15 +25,75 @@ const UserProvider = ({ children }) => {
             case 'get':
                 return {[dataKey]: localStorage.getItem(key)};
             case 'remove':
-                if (typeof f === "function") {
+                if (Array.isArray(f)) {
+
+                    for (const obj of f) {
+
+                        for (const key in obj) {
+
+                            if (Object.hasOwnProperty.call(obj, key)
+                                && typeof obj[key] === "function") {
+
+                                await obj[key]();
+                            }
+                        }
+                    }
+                } else if (typeof f === "object") {
+
+                    for (const key in f) {
+
+                        if (Object.hasOwnProperty.call(f, key)
+                            && typeof f[key] === "function") {
+
+                            await f[key]();
+                        }
+                    }
+                }else if(typeof f === "function"){
+
                     await f();
                 }
+
                 localStorage.removeItem(key);
+
                 break;
             default:
                 break;
         }
     };
+
+    const Execute_array_obj_func = async (f)=>{
+
+        if (Array.isArray(f)) {
+
+            for (const obj of f) {
+
+                for (const key in obj) {
+
+                    if (Object.hasOwnProperty.call(obj, key)
+                        && typeof obj[key] === "function") {
+
+                        await obj[key]();
+                    }
+                }
+            }
+        }
+    }
+
+    const Execute_obj_func = async (f)=>{
+
+        if (typeof f === "object") {
+
+            for (const key in f) {
+
+                if (Object.hasOwnProperty.call(f, key)
+                    && typeof f[key] === "function") {
+
+                    await f[key]();
+                }
+            }
+        }
+    }
+
 
     const HandleLoading = async (page, setLoading, timeLoading)=>{
 
@@ -77,6 +137,9 @@ const UserProvider = ({ children }) => {
 
         }catch (error){
 
+            await OnLocalStorage("remove", "countdown", "", "data");
+            await OnLocalStorage("remove", "onLogin", "", "data");
+
             console.warn(error.request.response);
 
             if (typeof f === 'function') {
@@ -94,9 +157,9 @@ const UserProvider = ({ children }) => {
 
     const ExpiredLogin = () => {
 
+        OnLocalStorage("remove", "countdown", "", "data").then(r => r);
         localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
         logout();
-        OnLocalStorage("remove", "onLogin").then(r => r);
         window.location="/login";
 
     };
@@ -152,13 +215,15 @@ const UserProvider = ({ children }) => {
             myUser,
             login,
             logout,
-            RedirectAccount,
-            setTitlePage,
             FetchAPI,
-            GetStatusLogin,
+            setTitlePage,
             ExpiredLogin,
             HandleLoading,
             OnLocalStorage,
+            GetStatusLogin,
+            RedirectAccount,
+            Execute_obj_func,
+            Execute_array_obj_func
 
         }}>{children}
         </UserContext.Provider>

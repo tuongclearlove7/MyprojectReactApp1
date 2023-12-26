@@ -54,7 +54,7 @@ const Account = (props) => {
 
     const countDownLogin = async ()=>{
 
-        if(localStorage.getItem("onLogin")){
+        if(username){
 
             const wait = async () => {
 
@@ -80,9 +80,9 @@ const Account = (props) => {
 
         const wait = async () => {
 
-            if(!localStorage.getItem("onLogin")){
+            if(!username){
 
-                const timer = 1000;
+                const timer = 1500;
                 const interval = 1000;
 
                 for (let i = 0; i < timer / interval; i++) {
@@ -92,10 +92,16 @@ const Account = (props) => {
             }
         }
 
+        const object_function = [
+            {
+                "wait function": wait,
+            }
+        ];
+
         setLoading(true);
         const data = await OnLocalStorage("get", "onLoading", "", "data");
         console.log("LocalStorage data: ", data);
-        await OnLocalStorage("remove", "onLoading", "", "data", wait);
+        await OnLocalStorage("remove", "onLoading", "", "data", object_function);
         setLoading(false);
 
     };
@@ -106,7 +112,6 @@ const Account = (props) => {
 
         if(confirmLogout){
 
-            OnLocalStorage("remove", "onLogin", "", "data");
             logout();
             window.location="/login"
         }
