@@ -11,6 +11,7 @@ const UserContext = React.createContext({ username: null, auth: false });
 const UserProvider = ({ children }) => {
 
     const [myUser, setMyUser] = React.useState({username:null, auth: false});
+    const [countdown, setCountdown] = useState(0);
     const navigate = useNavigate();
     const setTitlePage = title => document.title = title;
 
@@ -65,16 +66,18 @@ const UserProvider = ({ children }) => {
                 },
             });
 
-            console.log(response);
-
             if(typeof f === 'object'){
 
-                console.log(f);
+                return f;
             }
+
+            console.log(response.data);
+
+            return response;
 
         }catch (error){
 
-            console.warn("Error fetching data:", error.request);
+            console.warn(error.request.response);
 
             if (typeof f === 'function') {
 
@@ -82,10 +85,10 @@ const UserProvider = ({ children }) => {
 
             } else {
 
-                console.log(f);
-
                 return f;
             }
+
+            return error.request;
         }
     }
 
@@ -93,7 +96,8 @@ const UserProvider = ({ children }) => {
 
         localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
         logout();
-        window.location="/login"
+        OnLocalStorage("remove", "onLogin").then(r => r);
+        window.location="/login";
 
     };
 

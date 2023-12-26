@@ -1,16 +1,8 @@
 import HeaderAccount from "./header/header";
 import React, {useContext, useEffect, useState} from "react";
 import Cookies from 'js-cookie';
-import axios from "axios";
 import StatusLogin from "../../feature/statusLogin";
-import {Routes, Route, useNavigate, Link} from 'react-router-dom';
-import ChatContainer from "../chat/chatContainer";
-import Home from "../home/home";
-import Company from "../company/company";
-import Blog from "../blog/blog";
-import Contact from "../contact/contact";
-import Login from "../auth/login";
-import Register from "../auth/register";
+import {Link, Route, Routes, useNavigate} from 'react-router-dom';
 import ChatAccount from "./chat/chatAccount";
 import Info from "./info/info";
 import DashBoard from "./dashboard/dashboard";
@@ -18,35 +10,20 @@ import {UserContext} from "../../feature/userContext";
 import styles from "../auth/loginStyle.module.css";
 import logo from "../../logo.svg";
 import loading_img from "../../loading.gif";
+import Count from "../../feature/count";
 
 const Account = (props) => {
 
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [renderMyUser, setRenderMyUser] = React.useState({username:null, status: false});
     const [loading, setLoading] = useState(false);
-    const [countdown, setCountdown] = useState(0);
     const { logout } = useContext(UserContext);
-    const { ExpiredLogin,OnLocalStorage, HandleLoading, setTitlePage, myUser } = useContext(UserContext);
+    const {OnLocalStorage, HandleLoading, setTitlePage, myUser } = useContext(UserContext);
     const username = Cookies.get('username');
     const email = Cookies.get('email');
     const token = Cookies.get('token');
     const navigate = useNavigate();
     const timer = 61000;
-
-
-    useEffect(() => {
-
-        const intervalId = setInterval(() => {
-
-            setCountdown(prevCountdown => {
-
-                return prevCountdown + 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, []);
-
 
     useEffect(() => {
 
@@ -77,28 +54,25 @@ const Account = (props) => {
 
     const countDownLogin = async ()=>{
 
-        if(myUser.auth !== true){
+        if(localStorage.getItem("onLogin")){
 
-            if(localStorage.getItem("onLogin")){
+            const wait = async () => {
 
-                const wait = async () => {
+                const interval = 1000;
 
-                    const interval = 1000;
+                for (let i = 0; i < timer / interval; i++) {
 
-                    for (let i = 0; i < timer / interval; i++) {
-
-                        await new Promise(resolve => setTimeout(resolve, interval));
-                        const countdown = (i + 1) * interval / 1000;
-                        console.log(`wait ${countdown}s`);
-                    }
-
-                    localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
-                    logout();
-                    navigate("/login");
+                    const data = (i + 1) * interval / 1000;
+                    OnLocalStorage("set","countdown",data,"data");
+                    await new Promise(resolve => setTimeout(resolve, interval));
                 }
 
-                await OnLocalStorage("remove", "onLogin", "", "data", wait);
+                await OnLocalStorage("remove", "countdown", "", "data");
+                localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
+                logout();
+                window.location="/login";
             }
+            await OnLocalStorage("remove", "onLogin", "", "data", wait);
         }
     }
 
@@ -106,12 +80,15 @@ const Account = (props) => {
 
         const wait = async () => {
 
-            const timer = 1000;
-            const interval = 1000;
+            if(!localStorage.getItem("onLogin")){
 
-            for (let i = 0; i < timer / interval; i++) {
-                await new Promise(resolve => setTimeout(resolve, interval));
-                console.log(`wait ${(i + 1) * interval / 1000}s`);
+                const timer = 1000;
+                const interval = 1000;
+
+                for (let i = 0; i < timer / interval; i++) {
+                    await new Promise(resolve => setTimeout(resolve, interval));
+                    console.log(`wait ${(i + 1) * interval / 1000}s`);
+                }
             }
         }
 
@@ -165,19 +142,7 @@ const Account = (props) => {
                 <div className={"account"}>
                     <StatusLogin />
                     <HeaderAccount username={username} handleLogout={handleLogout} />
-                    <h1 id={"countdown"}>
-                        <div className={"App-link"}>
-                             <span>
-                                Bạn sẽ hết hạn đăng nhập sau {timer/1000} giây
-                             </span>
-                             <span className={countdown < 50 ? "countdown-after" : "countdown-before"}>
-                                {countdown}
-                             </span>
-                             <span>
-                                s
-                             </span>
-                        </div>
-                    </h1>
+                    <Count timer={timer}/>
                     <div className="account-container">
                         <Routes>
                             <Route index element={<DashBoard />} />

@@ -89,7 +89,6 @@ function ChatContainer(props) {
         }
 
         const data = await OnLocalStorage("get", "onLoading", "", "data");
-        console.log("LocalStorage data: ", data);
         await OnLocalStorage("remove", "onLoading", "", "data", wait);
 
         setLoadingPage(false);

@@ -30,6 +30,7 @@ import {toast} from "react-toastify";
 import {UserContext} from "./feature/userContext";
 import {auth_name} from "./model/secrectName";
 import Weather from "./components/weather/weather";
+import Countdown from "./feature/countdown";
 
 const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
     extraHeaders: {
@@ -49,12 +50,7 @@ function App() {
     let [u, setU] = useState("");
     let [r, setR] = useState("");
     const env = `${process.env.REACT_APP_AUTH_METHOD} ${user}`;
-    const { RedirectAccount,
-            setTitlePage,
-            myUser,
-            login,
-            GetStatusLogin
-    } = useContext(UserContext);
+    const { RedirectAccount, setTitlePage, myUser, login, GetStatusLogin} = useContext(UserContext);
 
     useEffect(() => {
 
@@ -74,7 +70,7 @@ function App() {
         console.log("Socket connected");
     });
 
-    GetStatusLogin(url,env,{["Current userr: "]:myUser}).then();
+    GetStatusLogin(url,env,{["Current userr: "]:myUser});
 
     return (
         <div className="App">
