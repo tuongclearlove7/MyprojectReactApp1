@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
 import {Reconnect} from "../../feature/reconntect";
 import logo from "../../logo.svg";
+import chatNowImg from "../../typing.gif";
 import {roomNameData} from "../../model/roomNameData";
 
 
@@ -15,6 +16,8 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
 
     const [currentMsg, setCurrentMsg] = useState("");
     const [userList, setUserList] = useState([]);
+    const [statusMsgChatNow, setStatusMsgChatNow] = useState(false);
+    const [msgChatNow, setMsgChatNow] = useState("");
     const [messageList, setMessageList] = useState([]);
     const [userJoinRoomList, setUserJoinRoomList] = useState([]);
     const [userLeaveRoomList, setUserLeaveRoomList] = useState([]);
@@ -23,35 +26,6 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
     const navigate = useNavigate();
     const socketRef = useRef(socket);
 
-    const leaveRoom = async () => {
-
-        socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room, username });
-        navigate('/');
-        setShowChat(false);
-        setRoom("");
-        setUsername("");
-        socket.disconnect();
-        await Reconnect(socket);
-
-    };
-
-    const confirmLeaveRoom = (f) => {
-
-        const confirm = window.confirm("Hỏi lại lần cuối bạn có muốn rời khỏi phòng không?");
-
-        if(confirm){
-            (async ()=>{
-
-                socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room, username });
-                navigate('/');
-                setShowChat(false);
-                setRoom("");
-                setUsername("");
-                socket.disconnect();
-                await Reconnect(socket);
-            })();
-        }
-    }
 
     useEffect(() => {
 
@@ -107,6 +81,17 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
         });
     }, []);
 
+    useEffect(() => {
+
+        socket.on("user_guest_chat_now", async (data) => {
+
+            setStatusMsgChatNow(data.status);
+            setMsgChatNow(data.message);
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            setStatusMsgChatNow(false);
+        });
+    }, []);
+
 
     useEffect(() => {
 
@@ -138,6 +123,54 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
             socket.off(process.env.REACT_APP_USER_LEFT_ROOM);
         };
     }, []);
+
+    const leaveRoom = async () => {
+
+        socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room, username });
+        navigate('/');
+        setShowChat(false);
+        setRoom("");
+        setUsername("");
+        socket.disconnect();
+        await Reconnect(socket);
+
+    };
+
+    const confirmLeaveRoom = (f) => {
+
+        const confirm = window.confirm("Hỏi lại lần cuối bạn có muốn rời khỏi phòng không?");
+
+        if(confirm){
+
+            (async ()=>{
+
+                socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room, username });
+                navigate('/');
+                setShowChat(false);
+                setRoom("");
+                setUsername("");
+                socket.disconnect();
+                await Reconnect(socket);
+            })();
+        }
+    }
+
+    const chatNow = async (event) =>{
+
+        const msgNow = event.target.value;
+        setCurrentMsg(msgNow);
+
+        const data_chat_now = {
+
+            room : room,
+            author : username,
+            message : msgNow,
+            time : new Date(Date.now()).getHours() +
+            ":" +   new Date(Date.now()).getMinutes(),
+        }
+
+        await socket.emit("user_chat_now", data_chat_now);
+    }
 
     const sendMessage = async ()=>{
 
@@ -226,6 +259,14 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
                         </div>
                         )
                     })}
+                    {statusMsgChatNow === true ? (
+                        <div className="message" id={"you"}>
+                            <div className="message-chat-now">
+                                <p style={{paddingRight:"10px"}}>{msgChatNow}</p>
+                                <img width={"10%"} height={"10%"} src={chatNowImg} alt=""/>
+                            </div>
+                        </div>
+                    ) : ""}
                 </ScrollToBottom>
             </div>
             <div className="chat-footer">
@@ -233,9 +274,7 @@ function Chat({socket, username, room, setShowChat, title, setRoom, setUsername}
                    type="text"
                    placeholder="Hey..."
                    value={currentMsg}
-                   onChange={function(event){
-                       setCurrentMsg(event.target.value);
-                   }}
+                   onChange={chatNow}
                    onKeyPress={(event)=>{
                        event.key === "Enter" && sendMessage();
                    }}

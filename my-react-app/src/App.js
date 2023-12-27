@@ -50,7 +50,7 @@ function App() {
     let [u, setU] = useState("");
     let [r, setR] = useState("");
     const env = `${process.env.REACT_APP_AUTH_METHOD} ${user}`;
-    const { RedirectAccount, setTitlePage, myUser, login, GetStatusLogin} = useContext(UserContext);
+    const { myUser, login, GetStatusLogin} = useContext(UserContext);
 
     useEffect(() => {
 
@@ -75,7 +75,6 @@ function App() {
     return (
         <div className="App">
             <div className="container">
-                {/*{!myUser.auth && ()}*/}
                 <Header u={u} r={r} user={user} socket={socket} setShowChat={setShowChat}/>
                 <Routes>
                     <Route path="/" element={<ChatContainer socket_url={process.env.REACT_APP_API_LOCALHOST}
@@ -92,7 +91,6 @@ function App() {
                     <Route path="/login" element={<Login  title={`LOGIN - ${authorWebName}`} />}/>
                     <Route path="/register" element={<Register  title={`REGISTER - ${authorWebName}`} />}/>
                     <Route path="/weather" element={<Weather  title={`WEATHER - ${authorWebName}`} />}/>
-
                 </Routes>
                 <ScrollToTop smooth color="#6f00ff" />
                 <Footer/>

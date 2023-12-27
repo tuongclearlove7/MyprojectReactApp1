@@ -173,8 +173,7 @@ function Header(props) {
                                     </li>
                                 </ul>
                                 <form className="d-flex" role="search">
-                                    <input
-                                        className="form-control me-2"
+                                    <input className="form-control me-2"
                                         type="search"
                                         placeholder="Tìm kiếm"
                                         aria-label="Search"
