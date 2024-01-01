@@ -142,7 +142,7 @@ const UserProvider = ({children}) => {
             await OnLocalStorage("remove", "countdown", "", "data");
             await OnLocalStorage("remove", "onLogin", "", "data");
 
-            console.warn(error.response);
+            console.warn(error);
 
             if (typeof f === 'function') {
 
