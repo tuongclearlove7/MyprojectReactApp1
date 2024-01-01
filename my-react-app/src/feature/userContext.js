@@ -124,7 +124,8 @@ const UserProvider = ({children}) => {
                 headers: {
                     [auth_name]: env,
                 },
-                withCredentials: true,
+                mode: 'cors',
+                withCredentials: "include",
             });
 
             if (typeof f === 'object') {

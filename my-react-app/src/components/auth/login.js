@@ -44,7 +44,8 @@ function Login(props) {
 
         axios.get(url, {
 
-            withCredentials: true,
+            mode:'cors',
+            withCredentials: 'include',
 
         }).then(response => {
 
@@ -102,7 +103,8 @@ function Login(props) {
                     [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${csrfTokenState}`,
                     'Content-Type': 'application/json',
                 },
-                withCredentials: true,
+                mode: 'cors',
+                withCredentials: 'include',
             });
 
             await new Promise(resolve => setTimeout(resolve, 1000));
