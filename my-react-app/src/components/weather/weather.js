@@ -12,15 +12,15 @@ function Weather(props) {
     const hostname = `${process.env.REACT_APP_API_HOSTNAME}weather-api`;
     const {OnLocalStorage} = useContext(UserContext);
 
-    useEffect( () => {
+    useEffect(() => {
 
-       document.title = props.title;
+        document.title = props.title;
 
     }, []);
 
-    useEffect(   () => {
+    useEffect(() => {
 
-        const FetchData = async ()=>{
+        const FetchData = async () => {
 
             try {
 
@@ -69,14 +69,15 @@ function Weather(props) {
                     <div className="col-md-10 col-lg-8 col-xl-6">
                         <div className="card text-white" style={{borderRadius: "40px"}}>
                             <div className="bg-image" style={{borderRadius: "50px"}}>
-                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp"
+                                <img
+                                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp"
                                     className="card-img" alt="weather"/>
                                 <div className="mask"></div>
                             </div>
                             <div className="card-img-overlay text-dark p-5">
                                 {loading ? (
                                     <div className={"load-logo-center"}>
-                                        <img src={logo} className="loading-logo-account" alt="logo" />
+                                        <img src={logo} className="loading-logo-account" alt="logo"/>
                                     </div>
                                     ) : (
                                     <div>

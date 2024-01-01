@@ -4,14 +4,14 @@ import '../../../App.css';
 import Cookies from "js-cookie";
 
 
-function DashBoard(props){
+function DashBoard(props) {
 
     const username = Cookies.get('username');
 
-    return(
+    return (
         <div className="home-container">
             <header className="App-header">
-                <img src={logo} className="App-dash-logo" alt="logo" />
+                <img src={logo} className="App-dash-logo" alt="logo"/>
                 <p>
                     {username ? username.toUpperCase() : "Không có thông tin!"}
                 </p>

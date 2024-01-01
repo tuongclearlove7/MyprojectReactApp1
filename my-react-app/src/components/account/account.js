@@ -14,31 +14,34 @@ import Count from "../../feature/count";
 
 const Account = (props) => {
 
+    const [renderMyUser, setRenderMyUser] = React.useState({username: null, status: false});
+    const {OnLocalStorage, HandleLoading, setTitlePage, myUser} = useContext(UserContext);
     const [loadingLogin, setLoadingLogin] = useState(false);
-    const [renderMyUser, setRenderMyUser] = React.useState({username:null, status: false});
     const [loading, setLoading] = useState(false);
-    const { logout } = useContext(UserContext);
-    const {OnLocalStorage, HandleLoading, setTitlePage, myUser } = useContext(UserContext);
+    const [room, setRoom] = useState("");
+    const {logout, ExpiredLogin} = useContext(UserContext);
     const username = Cookies.get('username');
     const email = Cookies.get('email');
     const token = Cookies.get('token');
     const navigate = useNavigate();
     const timer = 61000;
 
+    console.log(myUser);
+
     useEffect(() => {
 
-        if(!username){
+        if (!username) {
 
             setTitlePage(props.title);
             setRenderMyUser({
-                username ,
+                username,
                 status: false,
             });
 
-        }else{
+        } else {
 
             setRenderMyUser({
-                username:myUser.username,
+                username: myUser.username,
                 status: true,
             });
             setTitlePage(`Tài khoản ${username}`);
@@ -52,9 +55,9 @@ const Account = (props) => {
 
     }, []);
 
-    const countDownLogin = async ()=>{
+    const countDownLogin = async () => {
 
-        if(username){
+        if (username) {
 
             const wait = async () => {
 
@@ -63,14 +66,11 @@ const Account = (props) => {
                 for (let i = 0; i < timer / interval; i++) {
 
                     const data = (i + 1) * interval / 1000;
-                    OnLocalStorage("set","countdown",data,"data");
+                    OnLocalStorage("set", "countdown", data, "data");
                     await new Promise(resolve => setTimeout(resolve, interval));
                 }
 
-                await OnLocalStorage("remove", "countdown", "", "data");
-                localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
-                logout();
-                window.location="/login";
+                ExpiredLogin();
             }
             await OnLocalStorage("remove", "onLogin", "", "data", wait);
         }
@@ -80,7 +80,7 @@ const Account = (props) => {
 
         const wait = async () => {
 
-            if(!username){
+            if (!username) {
 
                 const timer = 1500;
                 const interval = 1000;
@@ -110,56 +110,57 @@ const Account = (props) => {
 
         const confirmLogout = window.confirm('Bạn có chắc chắn muốn đăng xuất?');
 
-        if(confirmLogout){
+        if (confirmLogout) {
 
             logout();
-            window.location="/login"
+            window.location = "/login"
         }
     };
 
     return (
         <div className={"account-container"}>
             {!myUser.auth && (
-            <div>
-                {loading ? (
-                    <div className={"load-logo-center"}>
-                        <img src={logo} className="loading-logo-account" alt="logo" />
-                    </div>
-                ) : (
-                    <>{!renderMyUser.username && (
-                        <div className={"has-not-user"}>
-                            <Link onClick={() => HandleLoading("/login", setLoadingLogin, 1000)}>
-                                <span>Vui lòng đăng nhập vào tài khoản!</span>
-                                {loadingLogin && (
-                                <span id={styles.rou_logo}>
+                <div>
+                    {loading ? (
+                        <div className={"load-logo-center"}>
+                            <img src={logo} className="loading-logo-account" alt="logo"/>
+                        </div>
+                    ) : (
+                        <>{!renderMyUser.username && (
+                            <div className={"has-not-user"}>
+                                <Link onClick={() => HandleLoading("/login", setLoadingLogin, 1000)}>
+                                    <span>Vui lòng đăng nhập vào tài khoản!</span>
+                                    {loadingLogin && (
+                                        <span id={styles.rou_logo}>
                                   <img src={loading_img} className="loading-logo" alt="logo"/>
                                 </span>)
-                                }
-                            </Link>
-                        </div>
+                                    }
+                                </Link>
+                            </div>
                         )}
-                    </>
+                        </>
                     )
-                }
-            </div>)
+                    }
+                </div>)
             }
             {myUser.auth && (
                 <div className={"account"}>
-                    <StatusLogin />
-                    <HeaderAccount username={username} handleLogout={handleLogout} />
+                    <StatusLogin/>
+                    <HeaderAccount room={room} username={username} handleLogout={handleLogout}/>
                     <Count timer={timer}/>
                     <div className="account-container">
                         <Routes>
-                            <Route index element={<DashBoard />} />
+                            <Route index element={<DashBoard/>}/>
                             <Route path="/chat" element={
-                                <ChatAccount socket_url={process.env.REACT_APP_API_LOCALHOST}
-                                setU={props.setU}
-                                setR={props.setR}
-                                socket={props.socket}
-                                showChat={props.showChat}
-                                setShowChat={props.setShowChat}/>}
+                                <ChatAccount setRoom={setRoom} socket_url={process.env.REACT_APP_API_LOCALHOST}
+                                 setU={props.setU}
+                                 setR={props.setR}
+                                 socket={props.socket}
+                                 showChat={props.showChat}
+                                 setShowChat={props.setShowChat}
+                                />}
                             />
-                            <Route path="/info" element={<Info email={email} username={username} />} />
+                            <Route path="/info" element={<Info email={email} username={username}/>}/>
                         </Routes>
                     </div>
                 </div>

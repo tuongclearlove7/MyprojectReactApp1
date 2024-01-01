@@ -2,15 +2,27 @@ import React, {useContext, useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 import Account from "../account";
 import {UserContext} from "../../../feature/userContext";
+import {connect} from "react-redux";
+import {Reconnect} from "../../../feature/reconntect";
+import Cookies from "js-cookie";
 
 
-function HeaderAccount(props){
+function HeaderAccount(props) {
 
     const [hideHeader, setHideHeader] = useState(false);
-    const { logout, myUser} = useContext(UserContext);
+    const [socket, setSocket] = useState(null);
+    const {logout, myUser} = useContext(UserContext);
+    const username = Cookies.get('username');
     const location = useLocation();
 
     useEffect(() => {
+
+        const isSocket = props.dataReduxStore[0]?.socket;
+
+        if (isSocket) {
+
+            setSocket(isSocket);
+        }
 
         if (location.pathname === '/' ||
             location.pathname === '/home' ||
@@ -23,7 +35,15 @@ function HeaderAccount(props){
             setHideHeader(true);
         }
 
-    }, [location.pathname]);
+    }, [location.pathname, socket]);
+
+    const leaveRoom = async () => {
+
+        const room = props.room;
+        socket.emit(process.env.REACT_APP_LEAVE_ROOM, {room, username});
+        socket.disconnect();
+        await Reconnect(socket);
+    };
 
     return (
         <div>
@@ -32,7 +52,9 @@ function HeaderAccount(props){
                     <div>
                         <nav className="navbar navbar-expand-lg bg-body-tertiary">
                             <div className="container-fluid">
-                                <Link className="navbar-brand" to={"/account"}>
+                                <Link className="navbar-brand" to={"/account"} onClick={async () => {
+                                    await leaveRoom();
+                                }}>
                                     {props.username ? props.username.toUpperCase() : ""}
                                 </Link>
                                 <button
@@ -49,12 +71,16 @@ function HeaderAccount(props){
                                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                         <li className="nav-item">
-                                            <Link className="nav-link active" to="/account">
+                                            <Link className="nav-link active" onClick={async () => {
+                                                await leaveRoom();
+                                            }} to="/account">
                                                 Trang chủ
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link className="nav-link active" to="/account/info">
+                                            <Link className="nav-link active" onClick={async () => {
+                                                await leaveRoom();
+                                            }} to="/account/info">
                                                 Thông tin
                                             </Link>
                                         </li>
@@ -65,23 +91,26 @@ function HeaderAccount(props){
                                         </li>
                                         <li className="nav-item dropdown">
                                             <a className="nav-link dropdown-toggle"
-                                                href="#"
-                                                role="button"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false">
+                                               href="#"
+                                               role="button"
+                                               data-bs-toggle="dropdown"
+                                               aria-expanded="false">
                                                 Lựa chọn
                                             </a>
                                             <ul className="dropdown-menu">
                                                 <li>
-                                                    <Link className="dropdown-item" to="/account">
+                                                    <Link className="dropdown-item" to="/account" onClick={async () => {
+                                                        await leaveRoom();
+                                                    }}>
                                                         Trang chủ
                                                     </Link>
                                                 </li>
                                             </ul>
                                         </li>
                                     </ul>
-                                    <button className="btn btn-outline-success" type="submit" onClick={props.handleLogout}>
-                                        ĐĂNG XUẤT
+                                    <button className="btn btn-outline-success" type="submit"
+                                            onClick={props.handleLogout}>
+                                            ĐĂNG XUẤT
                                     </button>
                                 </div>
                             </div>
@@ -94,4 +123,12 @@ function HeaderAccount(props){
     );
 }
 
-export default HeaderAccount;
+const mapStateToProps = (state) => {
+
+    return {
+
+        dataReduxStore: state.data,
+    }
+}
+
+export default connect(mapStateToProps)(HeaderAccount);

@@ -1,20 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Routes, Route, useNavigate ,Link} from 'react-router-dom';
+import React, {useEffect, useState, useRef, useContext} from 'react';
+import {Routes, Route, useNavigate, Link} from 'react-router-dom';
 import ScrollToBottom from "react-scroll-to-bottom";
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
 import {Reconnect} from "../../../feature/reconntect"
 import logo from "../../../logo.svg";
+import {UserContext} from "../../../feature/userContext";
 
 
-function Chat(props){
+function Chat(props) {
 
     const [currentMsg, setCurrentMsg] = useState("");
     const [userList, setUserList] = useState([]);
     const [messageList, setMessageList] = useState([]);
     const [userJoinRoomList, setUserJoinRoomList] = useState([]);
     const [userLeaveRoomList, setUserLeaveRoomList] = useState([]);
+    const {OnLocalStorage} = useContext(UserContext);
     const navigate = useNavigate();
     const socketRef = useRef(props.socket);
 
@@ -30,17 +32,6 @@ function Chat(props){
         theme: "light",
 
     });
-
-    const leaveRoom = async () => {
-
-        props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, { room:props.room, username:props.username });
-        navigate('/account');
-        props.setShowChat(false);
-        props.setRoom("");
-        props.socket.disconnect();
-        await Reconnect(props.socket);
-
-    };
 
     useEffect(() => {
 
@@ -65,7 +56,7 @@ function Chat(props){
 
     useEffect(() => {
 
-        if(props.username !== "" && props.room !== ""){
+        if (props.username !== "" && props.room !== "") {
 
             Swal.fire({
                 title: `Xin chào ${props.username}`,
@@ -77,18 +68,18 @@ function Chat(props){
 
                     console.log('Button was clicked');
                 }
-            }).catch((error)=>{
+            }).catch((error) => {
 
                 console.log(error);
             });
 
-        }else{
+        } else {
 
             leaveRoom().then(res => {
 
                 console.log(res);
 
-            }).catch(error=>{
+            }).catch(error => {
 
                 console.log(error)
             });
@@ -135,40 +126,50 @@ function Chat(props){
         };
     }, []);
 
-    const sendMessage = async ()=>{
+    const sendMessage = async () => {
 
-        if(currentMsg !== ""){
+        if (currentMsg !== "") {
 
             const messageData = {
 
-                room : props.room,
-                author : props.username,
-                message : currentMsg,
-                time : new Date(Date.now()).getHours() +
-                    ":" +   new Date(Date.now()).getMinutes(),
+                room: props.room,
+                author: props.username,
+                message: currentMsg,
+                time: new Date(Date.now()).getHours() +
+                    ":" + new Date(Date.now()).getMinutes(),
             }
 
             await props.socket.emit(process.env.REACT_APP_SEND_MESSAGE, messageData);
-            setMessageList((list)=> [...list, messageData])
+            setMessageList((list) => [...list, messageData])
             setCurrentMsg("");
         }
     }
+    const leaveRoom = async () => {
+
+        props.socket.emit(process.env.REACT_APP_LEAVE_ROOM, {room: props.room, username: props.username});
+        navigate('/account/chat');
+        props.setShowChat(false);
+        props.setRoom("");
+        props.socket.disconnect();
+        await Reconnect(props.socket);
+    };
 
     return (
 
         <div className="chat-window">
             <b>Nhắn tin ngay</b>
             <div className="chat-header">
-                <div style={{padding:"10px", float:"left"}}>
-                    <b style={{color:"white"}}>Phòng: </b>
-                    <span style={{color:"white"}} id="room">
+                <div style={{padding: "10px", float: "left"}}>
+                    <b style={{color: "black"}}>Phòng: </b>
+                    <span style={{color: "black"}} id="room">
                     {props.room}
                     </span>
                 </div>
-                <div style={{padding:"10px", float:"right",}}>
-                    <span style={{ color: 'white', cursor: 'pointer' }} onClick={leaveRoom}>
+                <div style={{margin: "2.5px", float: "right",}}>
+                    <button className={"btn btn-danger"} style={{cursor: 'pointer'}}
+                            onClick={leaveRoom}>
                         Rời phòng
-                    </span>
+                    </button>
                 </div>
             </div>
             <div className="chat-content">
@@ -179,14 +180,14 @@ function Chat(props){
                                 <p id="user">Người dùng:</p>
                                 <ul>
                                     {userList.length > 0 ? (
-                                    userList.map((data) => (
-                                    <li style={{ color: "white", listStyle: "none" }} key={data.id}>
-                                        <img src={logo} className="App-user-logo" alt="logo" />
-                                        {data.username}
-                                    </li>))) : (
-                                    <div>
-                                        <p>No users available</p>
-                                    </div>
+                                        userList.map((data) => (
+                                            <li style={{color: "black", listStyle: "none"}} key={data.id}>
+                                                <img src={logo} className="App-user-logo" alt="logo"/>
+                                                {`${data.username} - đang online`}
+                                            </li>))) : (
+                                        <div>
+                                            <p>No users available</p>
+                                        </div>
                                     )}
                                 </ul>
                             </div>
@@ -206,10 +207,11 @@ function Chat(props){
                             </div>
                         </div>
                     ))}
-                    {messageList.map((messageContent)=>{
+                    {messageList.map((messageContent) => {
                         return (
                             <div>
-                                <div className="message" id={props.username=== messageContent.author ? "you" : "other"}>
+                                <div className="message"
+                                     id={props.username === messageContent.author ? "you" : "other"}>
                                     <div className="message-content">
                                         <p>{messageContent.message}</p>
                                     </div>
@@ -228,10 +230,10 @@ function Chat(props){
                     type="text"
                     placeholder="Hey..."
                     value={currentMsg}
-                    onChange={function(event){
+                    onChange={function (event) {
                         setCurrentMsg(event.target.value);
                     }}
-                    onKeyPress={(event)=>{
+                    onKeyPress={(event) => {
                         event.key === "Enter" && sendMessage();
                     }}
                 />

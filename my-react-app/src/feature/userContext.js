@@ -8,10 +8,10 @@ import axios from "axios";
 
 const UserContext = React.createContext({ username: null, auth: false });
 
-const UserProvider = ({ children }) => {
+
+const UserProvider = ({children}) => {
 
     const [myUser, setMyUser] = React.useState({username:null, auth: false});
-    const [countdown, setCountdown] = useState(0);
     const navigate = useNavigate();
     const setTitlePage = title => document.title = title;
 
@@ -48,7 +48,7 @@ const UserProvider = ({ children }) => {
                             await f[key]();
                         }
                     }
-                }else if(typeof f === "function"){
+                } else if (typeof f === "function") {
 
                     await f();
                 }
@@ -61,7 +61,7 @@ const UserProvider = ({ children }) => {
         }
     };
 
-    const Execute_array_obj_func = async (f)=>{
+    const Execute_array_obj_func = async (f) => {
 
         if (Array.isArray(f)) {
 
@@ -79,7 +79,7 @@ const UserProvider = ({ children }) => {
         }
     }
 
-    const Execute_obj_func = async (f)=>{
+    const Execute_obj_func = async (f) => {
 
         if (typeof f === "object") {
 
@@ -95,9 +95,9 @@ const UserProvider = ({ children }) => {
     }
 
 
-    const HandleLoading = async (page, setLoading, timeLoading)=>{
+    const HandleLoading = async (page, setLoading, timeLoading) => {
 
-        if(typeof setLoading === "function"){
+        if (typeof setLoading === "function") {
 
             setLoading(true);
             await new Promise(resolve => setTimeout(resolve, timeLoading));
@@ -106,27 +106,28 @@ const UserProvider = ({ children }) => {
         }
     }
 
-    const RedirectAccount = () =>{
+    const RedirectAccount = () => {
 
         const username = Cookies.get('username');
 
-        if(username){
+        if (username) {
 
             window.confirm('Bấm đăng xuất ra ngoài để trải nghiệm!');
             navigate("/account");
         }
     }
 
-    const GetStatusLogin = async (url, env, f)=>{
+    const GetStatusLogin = async (url, env, f) => {
 
-        try{
+        try {
             const response = await axios.get(url, {
                 headers: {
                     [auth_name]: env,
                 },
+                withCredentials: true,
             });
 
-            if(typeof f === 'object'){
+            if (typeof f === 'object') {
 
                 return f;
             }
@@ -135,12 +136,12 @@ const UserProvider = ({ children }) => {
 
             return response;
 
-        }catch (error){
+        } catch (error) {
 
             await OnLocalStorage("remove", "countdown", "", "data");
             await OnLocalStorage("remove", "onLogin", "", "data");
 
-            console.warn(error.request.response);
+            console.warn(error.response);
 
             if (typeof f === 'function') {
 
@@ -157,15 +158,16 @@ const UserProvider = ({ children }) => {
 
     const ExpiredLogin = () => {
 
+        console.log("logout");
         OnLocalStorage("remove", "countdown", "", "data").then(r => r);
-        localStorage.setItem("notify","Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
+        localStorage.setItem("notify", "Hết hạn đăng nhập. Vui lòng đăng nhập lại!!!");
         logout();
-        window.location="/login";
+        window.location = "/login";
 
     };
 
 
-    const FetchAPI = async (hostname, setData, auth_name, env) =>{
+    const FetchAPI = async (hostname, setData, auth_name, env) => {
 
         try {
             const response = await axios.get(hostname, {
@@ -176,7 +178,6 @@ const UserProvider = ({ children }) => {
             });
 
             setData(response.data);
-            console.log(response.data);
 
         } catch (error) {
 
@@ -184,9 +185,8 @@ const UserProvider = ({ children }) => {
         }
     }
 
-    const login = (username, email, token) => {
+    const login = (username, email) => {
 
-        Cookies.set("token", token, { expires: Date.now() + 30000, path: "/" });
         Cookies.set("username", username, { expires: Date.now() + 30000, path: "/" });
         Cookies.set("email", email, { expires: Date.now() + 30000, path: "/" });
         localStorage.setItem("username", username);
@@ -199,9 +199,7 @@ const UserProvider = ({ children }) => {
 
     const logout = () => {
 
-        Cookies.remove("token");
-        Cookies.remove('username');
-        Cookies.remove('email');
+        document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
         localStorage.removeItem("username");
 
         setMyUser((myUser)=>({

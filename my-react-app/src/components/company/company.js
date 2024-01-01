@@ -4,19 +4,19 @@ import Header from "../header/header";
 import {UserContext} from "../../feature/userContext";
 
 //component
-function Company(props){
+function Company(props) {
 
-    const { RedirectAccount, setTitlePage } = useContext(UserContext);
+    const {setTitlePage} = useContext(UserContext);
 
     useEffect(() => {
 
         setTitlePage(props.title);
 
-    }, [props.title]);
+    }, [props.title, setTitlePage]);
 
-    return(
+    return (
         <div className="home-container">
-            <CompanyItem title={props.title} />
+            <CompanyItem title={props.title}/>
         </div>
     );
 }

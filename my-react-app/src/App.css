@@ -154,6 +154,7 @@
 
 .App-header p{
 
+    text-align: center;
     color: #1a1a1a;
 }
 
@@ -484,10 +485,10 @@ body {
 }
 .chat-window .chat-header {
     height: 45px;
-    background: #263238;
-    border-bottom: 1px solid silver;
+    background: white;
     position: relative;
     cursor: pointer;
+    border: 1px solid black;
 }
 .chat-window .chat-header p {
     display: block;
@@ -558,11 +559,13 @@ body {
 .user-join{
 
     padding: 5px;
-    background-color: #263238;
+    background-color: white;
+    border-bottom: 1px solid black;
+    color:black;
 }
 
 .user-join p{
-    color: white;
+    color: black;
     font-family: "Times New Roman", serif;
     
 }

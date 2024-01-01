@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import Chat from "./chat";
 import io from 'socket.io-client';
-import { Routes, Route, useNavigate, Link } from 'react-router-dom';
-import { roomNameData } from "../../../model/roomNameData";
-import { ToastContainer, toast } from 'react-toastify';
+import {Routes, Route, useNavigate, Link} from 'react-router-dom';
+import {roomNameData} from "../../../model/roomNameData";
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RenderEffect from "../../../feature/renderEffect";
 import Swal from "sweetalert2";
@@ -12,21 +12,34 @@ import Cookies from "js-cookie";
 import {Reconnect} from "../../../feature/reconntect";
 import logo from "../../../logo.svg";
 import {auth_name} from "../../../model/secrectName";
+import {connect} from "react-redux";
+import {UserContext} from "../../../feature/userContext";
 
-const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, {
-    extraHeaders: {
-        [auth_name] : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
-    },
-});
 
 function ChatAccount(props) {
 
-    const [showChat, setShowChat] = useState(false);
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+
+        const isSocket = props.dataReduxStore[0]?.socket;
+
+        if (isSocket) {
+
+            setSocket(isSocket);
+        }
+
+    }, [props.dataReduxStore]);
+    const navigate = useNavigate();
     const username = Cookies.get('username');
     const [room, setRoom] = useState("");
-    const navigate = useNavigate();
-    const socketRef = useRef(socket);
+    const {OnLocalStorage} = useContext(UserContext);
+    const [showChat, setShowChat] = useState(false);
     const text = RenderEffect("Hãy nhập tên và chọn phòng!");
+    const socketRef = useRef({
+        on: () => {
+        }, off: () => {
+        }
+    });
 
     useEffect(() => {
 
@@ -45,9 +58,18 @@ function ChatAccount(props) {
 
     const joinRoom = function () {
 
-        console.log({room,username})
-        socket.emit(process.env.REACT_APP_JOIN_ROOM, {room, username});
-        setShowChat(true);
+        if (!room || room === "" || room === "Chọn phòng") {
+
+            navigate("/account/chat");
+            window.confirm("Vui lòng chọn phòng!");
+
+        } else {
+
+            props.setRoom(room);
+            console.log({room, username})
+            socket.emit(process.env.REACT_APP_JOIN_ROOM, {room, username});
+            setShowChat(true);
+        }
     }
 
     return (
@@ -55,13 +77,13 @@ function ChatAccount(props) {
             {!showChat ? (
                 <div className="joinChatContainer">
                     <header className="App-chat-logo">
-                        <img src={logo} className="App-logo" alt="logo" />
+                        <img src={logo} className="App-logo" alt="logo"/>
                     </header>
                     <select className="form-select"
-                        aria-label="Default select example"
-                        onChange={(event) => {
-                            setRoom(event.target.value);
-                        }}>
+                            aria-label="Default select example"
+                            onChange={(event) => {
+                                setRoom(event.target.value);
+                            }}>
                         <option selected>Chọn phòng</option>
                         {roomNameData.map((item, index) => {
                             if ('room' in item) {
@@ -76,19 +98,27 @@ function ChatAccount(props) {
                     </select>
                     <button onClick={joinRoom}>VÀO PHÒNG</button>
                 </div>
-                ) : (
-                    <div className="chat-container">
-                        <Chat socket={socket}
-                          username={username}
-                          room={room}
-                          setShowChat={setShowChat}
-                          setRoom={setRoom}
-                        />
-                    </div>
-                )}
-            <ToastContainer />
+            ) : (
+                <div className="chat-container">
+                    <Chat socket={socket}
+                      username={username}
+                      room={room}
+                      setShowChat={setShowChat}
+                      setRoom={setRoom}
+                    />
+                </div>
+            )}
+            <ToastContainer/>
         </div>
     );
 }
 
-export default ChatAccount;
+const mapStateToProps = (state) => {
+
+    return {
+
+        dataReduxStore: state.data,
+    }
+}
+
+export default connect(mapStateToProps)(ChatAccount);

@@ -8,19 +8,19 @@ import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
 import loading_img from "../../loading.gif";
 
-function Register(props){
+function Register(props) {
 
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [loadingRegister, setLoadingRegister] = useState(false);
-    const { RedirectAccount, setTitlePage, HandleLoading} = useContext(UserContext);
+    const {setTitlePage, HandleLoading} = useContext(UserContext);
     const [error, setError] = useState("");
-    const navigate = useNavigate();
+    useNavigate();
     const [data, setData] = useState({
 
-        firstName:"",
-        lastName:"",
-        email:"",
-        password:""
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: ""
     });
     const notifyError = (text, time) => toast.error(text, {
 
@@ -39,14 +39,14 @@ function Register(props){
 
         setTitlePage(props.title);
 
-    }, [props.title]);
+    }, [props.title, setTitlePage]);
 
-    const handleChange = ({ currentTarget: input }) => {
+    const handleChange = ({currentTarget: input}) => {
 
-        setData({...data, [input.name]:input.value});
+        setData({...data, [input.name]: input.value});
     }
 
-    const handleSubmit = async (e)=>{
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
@@ -54,7 +54,7 @@ function Register(props){
 
             setLoadingRegister(true)
             const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/register/store`;
-            const { data: res } = await axios.post(url, data, {
+            const {data: res} = await axios.post(url, data, {
                 headers: {
                     [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
                 },
@@ -63,34 +63,34 @@ function Register(props){
             await new Promise(resolve => setTimeout(resolve, 1000));
             window.location = "/login";
 
-        }catch (error) {
+        } catch (error) {
 
-            if(error.response && error.response.status >= 400 && error.response.status <= 500){
+            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
 
                 console.log(error.response);
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 notifyError(error.response.data.message);
                 setError(error.response.data.message);
             }
-        }finally {
+        } finally {
 
             setLoadingRegister(false);
         }
     }
 
-    return(<div>
+    return (<div>
             <div className="register-container">
                 <div className={styles.signup_form_container}>
                     <div className={styles.left}>
                         <h1>Đăng nhập ngay</h1>
-                        <Link onClick={()=>HandleLoading("/login", setLoadingLogin, 750)}>
+                        <Link onClick={() => HandleLoading("/login", setLoadingLogin, 750)}>
                             <button type="button" className={styles.white_btn}>
                                 <span>
                                     ĐĂNG NHẬP
                                 </span>
                                 {loadingLogin && (
-                                    <span style={{display:"block"}}>
-                                         <img src={loading_img} className="App-user-logo" alt="logo" />
+                                    <span style={{display: "block"}}>
+                                         <img src={loading_img} className="App-user-logo" alt="logo"/>
                                     </span>
                                 )}
                             </button>
@@ -140,8 +140,8 @@ function Register(props){
                                     ĐĂNG KÝ
                                 </span>
                                 {loadingRegister && (
-                                    <span style={{display:"block"}}>
-                                        <img src={loading_img} className="App-user-logo" alt="logo" />
+                                    <span style={{display: "block"}}>
+                                        <img src={loading_img} className="App-user-logo" alt="logo"/>
                                     </span>
                                 )}
                             </button>

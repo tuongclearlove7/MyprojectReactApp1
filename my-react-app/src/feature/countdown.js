@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef} from "react";
+
 function Countdown(props) {
 
     let refInstance = useRef(null);
@@ -16,7 +17,7 @@ function Countdown(props) {
         };
     };
     let initCounter = (e) => {
-        let { all, h, m, s } = getCounter(e);
+        let {all, h, m, s} = getCounter(e);
         if (all >= 0) {
             setCountdown(
                 (h > 9 ? h : "0" + h) +
@@ -58,4 +59,5 @@ function Countdown(props) {
         </>
     );
 }
+
 export default Countdown;
