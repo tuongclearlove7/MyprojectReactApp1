@@ -9,6 +9,8 @@ function DashBoard(props) {
     const username = Cookies.get('username');
     const admin = Cookies.get('role_admin');
 
+    console.log(admin)
+
     return (
         <div className="home-container">
             <header className="App-header">
