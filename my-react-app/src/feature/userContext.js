@@ -200,7 +200,11 @@ const UserProvider = ({children}) => {
 
     const logout = () => {
 
-        document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+        document.cookie.split(";").forEach(function(c) { 
+            
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+        });
+        
         localStorage.removeItem("username");
 
         setMyUser((myUser)=>({

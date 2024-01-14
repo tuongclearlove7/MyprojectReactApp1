@@ -13,7 +13,6 @@ function StatusLogin(props){
     const {GetStatusLogin , logout, ExpiredLogin} = useContext(UserContext);
     const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/account`;
 
-
     useEffect(() => {
 
         const env = `${process.env.REACT_APP_AUTH_METHOD} ${token}`;

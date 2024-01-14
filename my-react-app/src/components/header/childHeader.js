@@ -88,7 +88,6 @@ function ChildHeader(props){
                             style={{"--bs-scroll-height": "100px"}}>
                             <li className="nav-item">
                                 <Link className="nav-link" onClick={async () => {
-
                                     await leaveRoom();
                                 }
                                 } to={"/"}>

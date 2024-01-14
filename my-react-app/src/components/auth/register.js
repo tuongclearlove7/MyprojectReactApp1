@@ -78,7 +78,8 @@ function Register(props) {
         }
     }
 
-    return (<div>
+    return (
+        <div>
             <div className="register-container">
                 <div className={styles.signup_form_container}>
                     <div className={styles.left}>

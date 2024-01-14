@@ -121,27 +121,26 @@ const Account = (props) => {
         <div className={"account-container"}>
             {!myUser.auth && (
                 <div>
-                    {loading ? (
-                        <div className={"load-logo-center"}>
-                            <img src={logo} className="loading-logo-account" alt="logo"/>
+                {loading ? (
+                    <div className={"load-logo-center"}>
+                        <img src={logo} className="loading-logo-account" alt="logo"/>
+                    </div>
+                ) : (
+                    <>{!renderMyUser.username && (
+                        <div className={"has-not-user"}>
+                            <Link onClick={() => HandleLoading("/login", setLoadingLogin, 1000)}>
+                                <span>Vui lòng đăng nhập vào tài khoản!</span>
+                                {loadingLogin && (
+                                    <span id={styles.rou_logo}>
+                              <img src={loading_img} className="loading-logo" alt="logo"/>
+                            </span>)
+                                }
+                            </Link>
                         </div>
-                    ) : (
-                        <>{!renderMyUser.username && (
-                            <div className={"has-not-user"}>
-                                <Link onClick={() => HandleLoading("/login", setLoadingLogin, 1000)}>
-                                    <span>Vui lòng đăng nhập vào tài khoản!</span>
-                                    {loadingLogin && (
-                                        <span id={styles.rou_logo}>
-                                  <img src={loading_img} className="loading-logo" alt="logo"/>
-                                </span>)
-                                    }
-                                </Link>
-                            </div>
-                        )}
-                        </>
-                    )
-                    }
-                </div>)
+                    )}
+                    </>
+                )}
+            </div>)
             }
             {myUser.auth && (
                 <div className={"account"}>

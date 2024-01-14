@@ -7,14 +7,18 @@ import Cookies from "js-cookie";
 function DashBoard(props) {
 
     const username = Cookies.get('username');
+    const admin = Cookies.get('role_admin');
 
     return (
         <div className="home-container">
             <header className="App-header">
                 <img src={logo} className="App-dash-logo" alt="logo"/>
-                <p>
+                <span style={{color:"black"}}>
+                    <span style={{color:"#00d000"}}>
+                        {admin && ("ADMIN ")}
+                    </span>
                     {username ? username.toUpperCase() : "Không có thông tin!"}
-                </p>
+                </span>
             </header>
         </div>
     );

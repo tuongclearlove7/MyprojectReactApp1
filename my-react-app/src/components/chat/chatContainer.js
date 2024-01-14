@@ -230,8 +230,8 @@ function ChatContainer(props) {
                         </span>
                                 {loading && (
                                     <span>
-                                 <img src={logo} className="App-loading-logo" alt="logo"/>
-                            </span>
+                                          <img src={logo} className="App-loading-logo" alt="logo"/>
+                                    </span>
                                 )}
                             </button>
                         </div>
