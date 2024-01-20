@@ -26,7 +26,6 @@
 <script>
 
     import Test from "@/components/Test/Test.vue";
-    import QuizForm from "@/components/Test/QuizForm.vue";
     import Learn from "@/components/Test/Learn.vue";
     import Header from "@/components/Header.vue";
 
@@ -36,7 +35,6 @@
 
         components: {
 
-            QuizForm,
             Header,
             Learn,
             Test,
