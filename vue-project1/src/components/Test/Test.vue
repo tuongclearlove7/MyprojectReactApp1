@@ -1,6 +1,11 @@
 <template>
-  <div @click.self="onClose">
-    <h2>Hello world</h2>
+  <div  @click.self="onClose">
+    <img v-bind:style="{
+
+      width: '100%',
+      height: '100%',
+
+    }" v-bind:src="logo" alt="">
     <h3>{{title}}</h3>
     <h4 class="content" :class="{'text-red' : theme === 'contact'}">
       {{content}}
@@ -14,10 +19,12 @@
 
 <script>
 
-export default {
-    name: "Test",
-    components: {
+import logo_img from '@/assets/rose.jpg';
 
+export default {
+
+  name: "Test",
+    components: {
 
     },
     props:{
@@ -40,6 +47,8 @@ export default {
     data(){
 
         return {
+
+          logo: logo_img
 
         };
     },

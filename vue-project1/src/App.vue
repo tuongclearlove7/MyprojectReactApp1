@@ -1,10 +1,10 @@
 <template>
-
   <div class="container">
     <Header ref="header"></Header>
-    <teleport to="body">
-      <Test content="this is a test content"
-            title="This is a test new title"
+    <Button v-if="isBtn" :class="{[btnClass] : true}"  @click="clickMe">{{textbtn}}</Button>
+    <teleport to="div">
+      <Test title="This is a rose title"
+            content="this is a test content"
             ref="hello"
             theme="contact"
             v-if="isShowText"
@@ -19,31 +19,36 @@
         </template>
       </Test>
     </teleport>
-    <Button v-if="isBtn" :class="{[btnClass] : true}"  @click="clickMe">{{textbtn}}</Button>
+    <Learn/>
   </div>
 </template>
 
 <script>
 
     import Test from "@/components/Test/Test.vue";
+    import QuizForm from "@/components/Test/QuizForm.vue";
+    import Learn from "@/components/Test/Learn.vue";
     import Header from "@/components/Header.vue";
+
+    const myname = 'TuongClearlove7';
 
     export default {
 
         components: {
 
+            QuizForm,
             Header,
+            Learn,
             Test,
         },
         data(){
 
             return {
-
-              isShowText: false,
-              isBtn: true,
-              textbtn: 'Show',
-              btnClass: 'btn btn-default',
-
+                zeroNumber: 0,
+                isShowText: false,
+                isBtn: true,
+                textbtn: 'Show',
+                btnClass: 'btn btn-default',
             };
         },
         methods: {
@@ -73,6 +78,21 @@
   .btn-red{
 
     background: red;
+  }
+
+  .text-red{
+
+    color: red;
+  }
+
+  .text-green{
+
+    color: #00d000;
+  }
+
+  .text-underline{
+
+    text-decoration: underline;
   }
 
 </style>
