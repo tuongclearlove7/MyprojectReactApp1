@@ -67,10 +67,12 @@
   <h3>{{receipt(5)}}</h3>
 
 <!--  using event click   -->
-  <h3>{{name}}</h3>
+  <h3 v-once>{{name}}</h3>
   <div>
     <button v-on:click="change($event), decrement(1, $event)">Change name</button>
   </div>
+  <h3 v-pre>{{name}}</h3>
+
 
   <h3>{{count}}</h3>
   <div>
@@ -91,7 +93,7 @@
   <form @submit="submitForm">
     <div>
       <label for="name">Name</label>
-      <input id="name" type="text" placeholder="name..." v-model="formValues.name">
+      <input id="name" type="text" placeholder="name..." v-model.trim.lazy="formValues.name">
     </div>
 
     <div>
@@ -153,10 +155,46 @@
     </div>
 
     <div>
+      <label for="age">Age</label>
+      <input type="number" id="age" v-model.number="formValues.age" />
+    </div>
+
+    <div>
       <button>Submit</button>
     </div>
   </form>
 
+  <h3>{{lastname}} {{firstname}}</h3>
+  <h3>Computed fullname - {{fullName}}</h3>
+  <div v-for="item in items" :key="item">
+    <span class="item">
+      <b>Id: </b>{{item.id}}
+    </span>
+    <br>
+    <span class="item">
+      <b>Product name: </b>{{item.title}}
+    </span>
+    <br>
+    <span class="item">
+      <b>Price: </b>{{item.price}}
+    </span>
+    <br>
+    <span class="item">
+      <button class="btn-red" @click="removeItemById(item.id)">Xóa</button>
+    </span>
+  </div>
+  <br>
+  <h4>
+    Computed Total: {{total}}
+  </h4>
+
+  <div>
+    <label for="title">Title</label>
+    <input type="text" id="title" placeholder="Title..." v-model="newItem.title" />
+    <label for="price">Price</label>
+    <input type="text" id="price" placeholder="Price" v-model="newItem.price" />
+  </div>
+  <button @click="addItem">Add item</button>
 
 </template>
 
@@ -176,6 +214,8 @@ export default {
       textbtn: 'Show',
       btnClass: 'btn btn-default',
       name: myname,
+      firstname: 'Tran',
+      lastname: 'Tuong',
       alert: `<a href="/" onclick="alert('TuongClearlove7')">${myname}</a>`,
       textId: 'text-id',
       isDisabled: true,
@@ -221,7 +261,29 @@ export default {
         remoteWork: 'no',
         skillSet: [],
         yearsOfExperience: "",
-      }
+        age: null,
+      },
+      newItem: {
+        title: '',
+        price: ''
+      },
+      items: [
+        {
+          id: 1,
+          title: 'Laptop MSI Bravo 15',
+          price: 20000000
+        },
+        {
+          id: 2,
+          title: 'Macbook m2',
+          price: 30000000
+        },
+        {
+          id: 3,
+          title: 'Laptop DELL',
+          price: 22000000
+        },
+      ],
     };
   },
   methods: {
@@ -257,7 +319,109 @@ export default {
 
       console.log('Form values', this.formValues);
     },
+    addItem(){
+
+      const pRice = parseFloat(this.newItem.price ? this.newItem.price : 0);
+
+      try{
+
+        const maxId = this.items.reduce((max, item) => {
+
+          return item.id > max ? item.id : max;
+
+        }, this.items[0].id);
+
+        const max = maxId ? maxId : 1;
+
+        const item = {
+          id: max + 1,
+          title: this.newItem.title,
+          price: pRice,
+        };
+
+        if(!item.price){
+          alert(`Vui lòng nhập giá!`);
+        }else{
+          if(item.price !== 0){
+            if(item.price <= 200000000){
+              this.items.push(item);
+            }
+            else{
+              alert(`Vui lòng nhập giá bé hơn ${200000000}!`);
+            }
+          }else{
+            alert(`Vui lòng nhập giá khác ${0}!`);
+          }
+        }
+
+        this.newItem.title = '';
+        this.newItem.price = item.price;
+
+        console.log(this.items);
+
+      }catch (error) {
+
+        const item = {
+          id: 1,
+          title: this.newItem.title,
+          price: pRice,
+        };
+
+        if(!item.price){
+          alert(`Vui lòng nhập giá!`);
+        }else{
+          if(item.price !== 0){
+            if(item.price <= 200000000){
+              this.items.push(item);
+            }
+            else{
+              alert(`Vui lòng nhập giá bé hơn ${200000000}!`);
+            }
+          }else{
+            alert(`Vui lòng nhập giá khác ${0}!`);
+          }
+        }
+
+        this.newItem.title = '';
+        this.newItem.price = item.price;
+
+        console.log(this.items);
+
+      }
+    },
+
+    removeItemById(id) {
+
+      const indexToRemove = this.items.findIndex(item => item.id === id);
+
+      if (indexToRemove !== -1) {
+
+        this.items.splice(indexToRemove, 1);
+      } else {
+
+        console.warn(`Không tìm thấy mục với id ${id}`);
+      }
+    },
   },
+  computed: {
+    fullName(){
+
+      return `${this.lastname} ${this.firstname}`
+    },
+    total(){
+
+      return this.items.reduce((total, curr) => (total = total + curr.price), 0);
+    },
+    storeData(){
+      try{
+
+        return localStorage.getItem('items');
+      }catch (err){
+
+        return err;
+      }
+    },
+  }
 }
 </script>
 
@@ -281,6 +445,11 @@ export default {
 .text-underline{
 
   text-decoration: underline;
+}
+
+.item{
+
+  margin-left: 10px;
 }
 
 </style>
