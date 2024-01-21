@@ -3,7 +3,6 @@
     <img v-bind:style="{
 
       width: '100%',
-      height: '100%',
 
     }" v-bind:src="logo" alt="">
     <h3>{{title}}</h3>

@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <Header ref="header"></Header>
+    <div class="header" v-if="isShowHeader">
+      <Header ref="header"></Header>
+    </div>
     <Button v-if="isBtn" :class="{[btnClass] : true}"  @click="clickMe">{{textbtn}}</Button>
     <teleport to="div">
       <Test title="This is a rose title"
@@ -16,10 +18,10 @@
               Cancel
             </button>
           </div>
+          <Learn/>
         </template>
       </Test>
     </teleport>
-    <Learn/>
   </div>
 </template>
 
@@ -45,8 +47,9 @@
                 zeroNumber: 0,
                 isShowText: false,
                 isBtn: true,
-                textbtn: 'Show',
+                textbtn: 'Show app',
                 btnClass: 'btn btn-default',
+                isShowHeader: true,
             };
         },
         methods: {
@@ -57,13 +60,15 @@
 
                 if(this.isShowText){
 
-                  this.textbtn = 'Hide';
+                  this.isShowHeader = !this.isShowHeader;
+                  this.textbtn = 'Hide app';
                   this.btnClass = 'btn btn-red'
 
                 }else{
 
-                  this.textbtn = 'Show';
-                  this.btnClass = 'btn btn-default'
+                  this.textbtn = 'Show app';
+                  this.btnClass = 'btn btn-default';
+                  this.isShowHeader = !this.isShowHeader;
 
                 }
             }
