@@ -164,9 +164,10 @@
     </div>
   </form>
 
-  <h3>{{lastname}} {{firstname}}</h3>
+  <h3>{{firstname}} {{lastname}}</h3>
   <h3>Computed fullname - {{fullName}}</h3>
-  <div v-for="item in items" :key="item">
+  <button @click="changeName">Change name</button>
+  <div v-for="item in items" :key="item.id">
     <span class="item">
       <b>Id: </b>{{item.id}}
     </span>
@@ -180,13 +181,45 @@
     </span>
     <br>
     <span class="item">
-      <button class="btn-red" @click="removeItemById(item.id)">Xóa</button>
+      <button class="btn-red" @click="removeItemById(item.id)">Delete</button>
     </span>
   </div>
   <br>
   <h4>
-    Computed Total: {{total}}
+    Total: {{total}}
   </h4>
+
+  <h3>Price item > 20000000</h3>
+  <h3 v-for="item in expensiveItem" :key="item.id">
+     <span class="item">
+      <b>Id: </b>{{item.id}}
+    </span>
+    <br>
+    <span class="item">
+      <b>Product name: </b>{{item.title}}
+    </span>
+    <br>
+    <span class="item">
+      <b>Price: </b>{{item.price}}
+    </span>
+    <br>
+  </h3>
+
+  <h3>Volume Tracker (0-20)</h3>
+  <h3>Current volume - {{volume}}</h3>
+  <div>
+    <button @click="volume += 2">Increment</button>
+    <button @click="volume -= 2">Deccrement</button>
+  </div>
+
+  <input type="text" v-model="movie"/>
+  <input type="text" v-model="movieInfo.title"/>
+  <input type="text" v-model="movieInfo.actor"/>
+  <div>
+    <button @click="movieList = movieList.concat([movieInfo.title])">
+      Add movie
+    </button>
+  </div>
 
   <div>
     <label for="title">Title</label>
@@ -194,6 +227,7 @@
     <label for="price">Price</label>
     <input type="text" id="price" placeholder="Price" v-model="newItem.price" />
   </div>
+
   <button @click="addItem">Add item</button>
 
 </template>
@@ -209,13 +243,14 @@ export default {
 
       count: 0,
       zeroNumber: 0,
+      volume: 0,
       isShowText: false,
       isBtn: true,
       textbtn: 'Show',
       btnClass: 'btn btn-default',
       name: myname,
-      firstname: 'Tran',
-      lastname: 'Tuong',
+      firstname: 'Tuong',
+      lastname: 'Tran',
       alert: `<a href="/" onclick="alert('TuongClearlove7')">${myname}</a>`,
       textId: 'text-id',
       isDisabled: true,
@@ -284,6 +319,12 @@ export default {
           price: 22000000
         },
       ],
+      movie: 'Tuong',
+      movieInfo: {
+        title: '',
+        actor: '',
+      },
+      movieList: ['Tuong', 'Clearlove7'],
     };
   },
   methods: {
@@ -402,11 +443,33 @@ export default {
         console.warn(`Không tìm thấy mục với id ${id}`);
       }
     },
+    changeName(){
+
+        this.zeroNumber++;
+        console.log(this.zeroNumber);
+
+        if(this.zeroNumber % 2 === 0){
+
+          this.fullName = 'Tuong Tran';
+        }else{
+
+          this.fullName = 'Tuong Clearlove7';
+        }
+    },
   },
   computed: {
-    fullName(){
+    fullName : {
 
-      return `${this.lastname} ${this.firstname}`
+      get(){
+
+        return `${this.firstname} ${this.lastname}`
+      },
+      set(value){
+
+        const names = value.split(' ')
+        this.firstname = names[0];
+        this.lastname = names[1];
+      },
     },
     total(){
 
@@ -421,7 +484,43 @@ export default {
         return err;
       }
     },
-  }
+    expensiveItem(){
+
+      return this.items.filter(item=>item.price>20000000);
+    },
+  },
+
+  watch: {
+
+    volume(newValue, oldValue){
+
+      if(newValue > oldValue && newValue === 10){
+
+        alert('Listening to a high volume for a long time may damage your hearing!');
+      }
+    },
+    movie : {
+
+      handler(newValue){
+
+        console.log("Calling API with movie name:", newValue);
+      },
+      immediate: true,
+    },
+    movieInfo: {
+      handler(newValue){
+
+        console.log("Calling API with movie name:", newValue.title, newValue.actor);
+      },
+      deep: true,
+    },
+    movieList: {
+      handler(newValue){
+
+        console.log("Update list", newValue);
+      },
+    }
+  },
 }
 </script>
 
