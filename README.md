@@ -39,12 +39,19 @@ function View() {
 ### useEffect hooks
 
 ```js
+- Khi sử dụng useEffect chúng sẽ phải truyền vào hàm callback
+- Hàm callback trong useEffect sẽ luôn được gọi khi
+component mounted re render
 - Khi dùng useEffect sẽ có 3 trường hợp mà chúng ta sử dụng đến đó 
 là những trg hợp sau:
-+ sử dụng useEffect chỉ truyền vào hàm callbacks
-+ Hàm callback trong useEffect sẽ luôn được gọi khi
-component re render
 useEffect(()=>{});
++ sử dụng useEffect truyền vào 1 mảng rỗng
+
+useEffect(()=>{}, []);
++ sử dụng useEffect truyền vào 1 mảng chứa các dependency
+(sự phụ thuộc)
+
+useEffect(()=>{}, [depen]);
 
 + ví dụ: 
 
@@ -86,15 +93,7 @@ function View() {
   );
 }
 
-+ sử dụng useEffect truyền vào 1 mảng rỗng
-useEffect(()=>{}, []);
 
-+ sử dụng useEffect truyền vào 1 mảng chứa các dependency
-(sự phụ thuộc)
-useEffect(()=>{}, [depen]);
-
-- Hàm callback trong useEffect sẽ luôn được gọi khi
-component mounted (render)
 
 
 ```
