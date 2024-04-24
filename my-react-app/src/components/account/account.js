@@ -1,5 +1,5 @@
 import HeaderAccount from "./header/header";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import Cookies from 'js-cookie';
 import StatusLogin from "../../feature/statusLogin";
 import {Link, Route, Routes, useNavigate} from 'react-router-dom';
@@ -11,6 +11,9 @@ import styles from "../auth/loginStyle.module.css";
 import logo from "../../logo.svg";
 import loading_img from "../../loading.gif";
 import Count from "../../feature/count";
+import ListUser from "./admin/ListUser";
+import {connect} from "react-redux";
+
 
 const Account = (props) => {
 
@@ -19,14 +22,13 @@ const Account = (props) => {
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [room, setRoom] = useState("");
-    const {logout, ExpiredLogin} = useContext(UserContext);
+    const {logout, ExpiredLogin, socket} = useContext(UserContext);
     const username = Cookies.get('username');
     const email = Cookies.get('email');
     const token = Cookies.get('token');
     const navigate = useNavigate();
-    const timer = 61000;
+    const timer = 61000000;
 
-    console.log(myUser);
 
     useEffect(() => {
 
@@ -40,13 +42,30 @@ const Account = (props) => {
 
         } else {
 
+            console.log(myUser);
             setRenderMyUser({
                 username: myUser.username,
                 status: true,
             });
+
+            if (socket) {
+                socket.emit('user_login', email);
+            }
             setTitlePage(`Tài khoản ${username}`);
         }
-    }, [props.token, username]);
+    }, [props.token, username, myUser, socket]);
+
+    useEffect(() => {
+        const handleDataListUser = (data) => {
+
+        };
+
+        socket.on("send_data_list_user", handleDataListUser);
+
+        return () => {
+            socket.off("send_data_list_user", handleDataListUser);
+        };
+    }, [socket]);
 
     useEffect(() => {
 
@@ -99,8 +118,7 @@ const Account = (props) => {
         ];
 
         setLoading(true);
-        const data = await OnLocalStorage("get", "onLoading", "", "data");
-        console.log("LocalStorage data: ", data);
+        await OnLocalStorage("get", "onLoading", "", "data");
         await OnLocalStorage("remove", "onLoading", "", "data", object_function);
         setLoading(false);
 
@@ -112,6 +130,7 @@ const Account = (props) => {
 
         if (confirmLogout) {
 
+            socket.emit('user_login_leave_room', {room: 'global', email: email});
             logout();
             window.location = "/login"
         }
@@ -132,8 +151,8 @@ const Account = (props) => {
                                 <span>Vui lòng đăng nhập vào tài khoản!</span>
                                 {loadingLogin && (
                                     <span id={styles.rou_logo}>
-                              <img src={loading_img} className="loading-logo" alt="logo"/>
-                            </span>)
+                                         <img src={loading_img} className="loading-logo" alt="logo"/>
+                                    </span>)
                                 }
                             </Link>
                         </div>
@@ -146,27 +165,31 @@ const Account = (props) => {
                 <div className={"account"}>
                     <StatusLogin/>
                     <HeaderAccount room={room} username={username} handleLogout={handleLogout}/>
-                    <Count timer={timer}/>
                     <div className="account-container">
                         <Routes>
-                            <Route index element={<DashBoard/>}/>
+                            <Route index element={<DashBoard timer={timer} />} />
+                            <Route path="/list-user" element={<ListUser/>} />
+                            <Route path="/info" element={<Info email={email} username={username} />} />
                             <Route path="/chat" element={
-                                <ChatAccount setRoom={setRoom} socket_url={process.env.REACT_APP_API_LOCALHOST}
-                                 setU={props.setU}
-                                 setR={props.setR}
-                                 socket={props.socket}
-                                 showChat={props.showChat}
-                                 setShowChat={props.setShowChat}
+                                <ChatAccount
+                                    setRoom={setRoom}
+                                    socket_url={process.env.REACT_APP_API_LOCALHOST}
+                                    setU={props.setU}
+                                    setR={props.setR}
+                                    socket={props.socket}
+                                    showChat={props.showChat}
+                                    setShowChat={props.setShowChat}
                                 />}
                             />
-                            <Route path="/info" element={<Info email={email} username={username}/>}/>
                         </Routes>
+
                     </div>
                 </div>
             )}
         </div>
     );
 };
+
 
 
 export default Account;

@@ -1,3 +1,105 @@
+# KNOWLEDGE HOOKS IN REACT JS
+
+### useState hook
+```javascript
+
+- Khi sử dụng useState react sẽ cho phép component render lại 
+và thay đổi lại giá trị mà chúng ta muốn hiển thị ra giao diện.
+Còn nếu thực hiện kiểu gán biến bình thường thì component sẽ 
+không re render và giá trị mà chúng ta muốn hiển thị 
+ra giao diện sẽ không thay đổi
+ví dụ:
+
+import React, { useState } from 'react';
+
+function View() {
+  const [name, setName] = useState("Tuong");//giá trị mặc định của biến name sẽ là Tuong
+
+  return (
+    <div>
+      <p>My name: {name}</p>
+      <button onClick={() =>{
+
+         setName("Tran The Tuong");// sử dụng setName thì biến name sẽ cập nhật
+         // lại thành Tran The Tuong và component sẽ re render lại và hiển thị 
+         // ra Tran The Tuong
+         //name = "Tran The Tuong" còn nếu làm thế này thì biến name vẫn sẽ
+         //cập nhật thành Tran The Tuong tuy nhiên component sẽ không re render 
+         // nên giá trị hiển thị ra vẫn là Tuong
+      }}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+
+```
+
+### useEffect hooks
+
+```js
+- Khi dùng useEffect sẽ có 3 trường hợp mà chúng ta sử dụng đến đó 
+là những trg hợp sau:
++ sử dụng useEffect chỉ truyền vào hàm callbacks
++ Hàm callback trong useEffect sẽ luôn được gọi khi
+component re render
+useEffect(()=>{});
+
++ ví dụ: 
+
+import React, { useState } from 'react';
+
+function View() {
+  const [name, setName] = useState("");
+
+  // Mỗi lần gõ vào input component 
+  // sẽ (mounted) re render lại và
+  // hàm callback sẽ được gọi
+  // Hàm useEffect sẽ thực thi sau khối lệnh return
+  useEffect(()=>{
+    // gõ vào input 10 lần Mounted sẽ in ra 10 lần
+    console.log("Mounted");
+  });
+
+  useEffect(() => {
+      //Mounted sẽ in ra 1 lần mỗi khi component mounted và render
+      console.log("Mounted!!!");
+  }, []);
+
+  //trường hợp này Mounted vẫn sẽ in ra mỗi khi
+    //component re render nó sẽ được gọi
+    // trước khối lệnh return
+    // Tuy nhiên nếu khối lệnh gọi trc này lỗi
+    // điều đó sẽ làm lỗi ứng dụng
+    //đây là 1 ví dụ:
+    console.log(a); 
+    let a = 1;
+    console.log("Mounted");
+
+  return (
+    <div>
+        {/*Khối lệnh thực thi này sẽ thực thi trước useEffect*/}
+        {console.log(name)}
+       <input value={title} onChange={e => setName(e.target.value)}/>
+    </div>
+  );
+}
+
++ sử dụng useEffect truyền vào 1 mảng rỗng
+useEffect(()=>{}, []);
+
++ sử dụng useEffect truyền vào 1 mảng chứa các dependency
+(sự phụ thuộc)
+useEffect(()=>{}, [depen]);
+
+- Hàm callback trong useEffect sẽ luôn được gọi khi
+component mounted (render)
+
+
+```
+
+
 # PROJECT WEB API
 
 

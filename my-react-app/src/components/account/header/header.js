@@ -13,6 +13,7 @@ function HeaderAccount(props) {
     const [socket, setSocket] = useState(null);
     const {logout, myUser} = useContext(UserContext);
     const username = Cookies.get('username');
+    const admin = Cookies.get('role_admin');
     const location = useLocation();
 
     useEffect(() => {
@@ -105,6 +106,15 @@ function HeaderAccount(props) {
                                                         Trang chủ
                                                     </Link>
                                                 </li>
+                                                {admin && (
+                                                    <li>
+                                                        <Link className="dropdown-item" to="/account/list-user" onClick={async () => {
+                                                            await leaveRoom();
+                                                        }}>
+                                                            Danh sách người dùng
+                                                        </Link>
+                                                    </li>
+                                                )}
                                             </ul>
                                         </li>
                                     </ul>

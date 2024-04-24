@@ -11,14 +11,14 @@ import {UserContext} from "../../../feature/userContext";
 
 function Chat(props) {
 
+    const [userJoinRoomList, setUserJoinRoomList] = useState([]);
+    const [userLeaveRoomList, setUserLeaveRoomList] = useState([]);
     const [currentMsg, setCurrentMsg] = useState("");
     const [userList, setUserList] = useState([]);
     const [messageList, setMessageList] = useState([]);
-    const [userJoinRoomList, setUserJoinRoomList] = useState([]);
-    const [userLeaveRoomList, setUserLeaveRoomList] = useState([]);
     const {OnLocalStorage} = useContext(UserContext);
-    const navigate = useNavigate();
     const socketRef = useRef(props.socket);
+    const navigate = useNavigate();
 
     const notify = (text, time) => toast.success(text, {
 
@@ -117,7 +117,6 @@ function Chat(props) {
         props.socket.on(process.env.REACT_APP_USER_LEFT_ROOM, (data) => {
 
             setUserLeaveRoomList((list) => [...list, data]);
-
         });
 
         return () => {

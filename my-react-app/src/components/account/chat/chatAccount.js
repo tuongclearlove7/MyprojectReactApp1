@@ -35,26 +35,6 @@ function ChatAccount(props) {
     const {OnLocalStorage} = useContext(UserContext);
     const [showChat, setShowChat] = useState(false);
     const text = RenderEffect("Hãy nhập tên và chọn phòng!");
-    const socketRef = useRef({
-        on: () => {
-        }, off: () => {
-        }
-    });
-
-    useEffect(() => {
-
-        const handleUser = function (data) {
-
-            console.log(data);
-        };
-
-        socketRef.current.on(process.env.REACT_APP_JOIN_ROOM, handleUser);
-
-        return () => {
-
-            socketRef.current.off(process.env.REACT_APP_JOIN_ROOM, handleUser);
-        };
-    }, []);
 
     const joinRoom = function () {
 
@@ -79,12 +59,12 @@ function ChatAccount(props) {
                     <header className="App-chat-logo">
                         <img src={logo} className="App-logo" alt="logo"/>
                     </header>
-                    <select className="form-select"
+                    <select className="form-select" defaultValue="Chọn phòng"
                             aria-label="Default select example"
                             onChange={(event) => {
                                 setRoom(event.target.value);
                             }}>
-                        <option selected>Chọn phòng</option>
+                        <option>Chọn phòng</option>
                         {roomNameData.map((item, index) => {
                             if ('room' in item) {
                                 return item.room.map((roomName, roomIndex) => (

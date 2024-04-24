@@ -4,7 +4,13 @@ import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
 import {auth_name} from "../model/secrectName";
 import axios from "axios";
+import io from "socket.io-client";
 
+const socket = io.connect(process.env.REACT_APP_API_LOCALHOST, {
+    extraHeaders: {
+        [auth_name] : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
+    },
+});
 
 const UserContext = React.createContext({ username: null, auth: false });
 
@@ -14,6 +20,7 @@ const UserProvider = ({children}) => {
     const [myUser, setMyUser] = React.useState({username:null, auth: false});
     const navigate = useNavigate();
     const setTitlePage = title => document.title = title;
+
 
     const OnLocalStorage = async (on, key, value, dataKey, f) => {
 
@@ -132,9 +139,7 @@ const UserProvider = ({children}) => {
 
                 return f;
             }
-
-            console.log(response.data);
-
+            
             return response;
 
         } catch (error) {
@@ -188,9 +193,8 @@ const UserProvider = ({children}) => {
 
     const login = (username, email) => {
 
-        Cookies.set("username", username, { expires: Date.now() + 30000, path: "/" });
-        Cookies.set("email", email, { expires: Date.now() + 30000, path: "/" });
-        localStorage.setItem("username", username);
+        Cookies.set("username", username, { expires: Date.now() + 3000000, path: "/" });
+        Cookies.set("email", email, { expires: Date.now() + 3000000, path: "/" });
 
         setMyUser((myUser)=>({
             username: username,
@@ -204,8 +208,6 @@ const UserProvider = ({children}) => {
             
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
         });
-        
-        localStorage.removeItem("username");
 
         setMyUser((myUser)=>({
             username: null,
@@ -215,6 +217,7 @@ const UserProvider = ({children}) => {
 
     return (
         <UserContext.Provider value={{
+            socket,
             myUser,
             login,
             logout,

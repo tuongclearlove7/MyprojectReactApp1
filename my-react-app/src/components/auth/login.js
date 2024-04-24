@@ -11,7 +11,7 @@ import {UserContext} from "../../feature/userContext";
 import {auth_name} from "../../model/secrectName";
 import logo from "../../logo.svg";
 import loading_img from "../../loading.gif";
-import { useDispatch } from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 
 
 function Login(props) {
@@ -22,10 +22,21 @@ function Login(props) {
     const [loadingLogin, setLoadingLogin] = useState(false);
     const {OnLocalStorage, setTitlePage} = useContext(UserContext);
     const {login, HandleLoading} = useContext(UserContext);
-    const hostname = process.env.REACT_APP_API_HOSTNAME;
+    const hostname = process.env.REACT_APP_API_LOCALHOST;
     const url = `${hostname}auth-api/login`;
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+
+        const isSocket = props.dataReduxStore[0]?.socket;
+
+        if (isSocket) {
+
+            setSocket(isSocket);
+        }
+
+    }, [props.dataReduxStore]);
 
     useEffect(() => {
 
@@ -108,7 +119,13 @@ function Login(props) {
             });
 
             await new Promise(resolve => setTimeout(resolve, 1000));
+
             login(res.username, res.email, res.data);
+
+            if(res.role_admin){
+                Cookies.set("role_admin", res.role_admin, { expires: Date.now() + 3000000, path: "/" });
+            }
+
             onSetLocalStorage("/account");
 
         } catch (error) {
@@ -181,4 +198,12 @@ function Login(props) {
     </div>);
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+
+    return {
+
+        dataReduxStore: state.data,
+    }
+}
+
+export default connect(mapStateToProps)(Login);

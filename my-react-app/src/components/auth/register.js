@@ -20,7 +20,8 @@ function Register(props) {
         firstName: "",
         lastName: "",
         email: "",
-        password: ""
+        password: "",
+        is_online: 0,
     });
     const notifyError = (text, time) => toast.error(text, {
 
@@ -53,7 +54,7 @@ function Register(props) {
         try {
 
             setLoadingRegister(true)
-            const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/register/store`;
+            const url = `${process.env.REACT_APP_API_LOCALHOST}auth-api/register/store`;
             const {data: res} = await axios.post(url, data, {
                 headers: {
                     [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
@@ -133,6 +134,14 @@ function Register(props) {
                                 name="password"
                                 onChange={handleChange}
                                 value={data.password}
+                                required
+                                className={styles.input}
+                            />
+                            <input
+                                type="hidden"
+                                name="is_online"
+                                onChange={handleChange}
+                                value={data.is_online}
                                 required
                                 className={styles.input}
                             />

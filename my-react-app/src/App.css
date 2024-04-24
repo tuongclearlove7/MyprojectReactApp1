@@ -88,11 +88,9 @@
 #countdown {
     float: left;
     text-align: center;
-    position: relative;
     width: 100%;
     font-size: 30px;
     color: black;
-    top: 50px;
 }
 .countdown-before{
 
@@ -747,6 +745,21 @@ body {
 
 }
 
+@media (max-width: 550px) {
+
+    .list-users{
+
+        float: left;
+        width: 100%;
+
+    }
+
+    .layout-left{
+
+        display: none;
+    }
+}
+
 .footer-container{
 
     clear: both;
@@ -768,4 +781,26 @@ body {
 #header_display{
 
     display: block;
+}
+
+.container-list-user{
+
+    float: left;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding-top: 70px;
+}
+
+.list-users{
+
+    float: left;
+    width: 50%;
+
+}
+
+.layout-left{
+    float: left;
+    width: 50%;
+    color: white;
 }

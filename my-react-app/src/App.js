@@ -29,11 +29,11 @@ import {toast} from "react-toastify";
 import {UserContext} from "./feature/userContext";
 import {auth_name} from "./model/secrectName";
 import Weather from "./components/weather/weather";
-import Countdown from "./feature/countdown";
+
 
 function App() {
 
-    const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/account`;
+    const url = `${process.env.REACT_APP_API_LOCALHOST}auth-api/account`;
     const authorWebName = "CLEARLOVE7";
     const [showChat, setShowChat] = useState(false);
     const [showHeader, setShowHeader] = useState(false);
@@ -65,7 +65,6 @@ function App() {
                     <Route path="/home" element={<Home title={`HOME - ${authorWebName}`} learn={`${authorWebName}`}/>}/>
                     <Route path="/account/*" exact element={<Account  socket_url={process.env.REACT_APP_API_LOCALHOST}
                     setU={setU} setR={setR} title={`CHAT - ${authorWebName}`} showChat={showChat} setShowChat={setShowChat}/>}/>
-                    <Route path="/account" element={<Account title={`ACCOUNT - ${authorWebName}`} exact element={<Home/>}/> }/>
                     <Route path="/company" element={<Company  title={`COMPANY - ${authorWebName}`} />}/>
                     <Route path="/blog" element={<Blog  title={`BLOG - ${authorWebName}`} />}/>
                     <Route path="/contact" element={<Contact  title={`CONTACT - ${authorWebName}`} />}/>
