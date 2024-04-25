@@ -13,7 +13,8 @@ ví dụ:
 import React, { useState } from 'react';
 
 function View() {
-  const [name, setName] = useState("Tuong");//giá trị mặc định của biến name sẽ là Tuong
+  //giá trị mặc định của biến name sẽ là Tuong
+  const [name, setName] = useState("Tuong");
 
   return (
     <div>
@@ -45,13 +46,15 @@ component mounted re render
 - Khi dùng useEffect sẽ có 3 trường hợp mà chúng ta sử dụng đến đó 
 là những trg hợp sau:
 useEffect(()=>{});
-+ sử dụng useEffect truyền vào 1 mảng rỗng
++ sử dụng useEffect chỉ truyền vào hàm callback
 
 useEffect(()=>{}, []);
-+ sử dụng useEffect truyền vào 1 mảng chứa các dependency
-(sự phụ thuộc)
++ sử dụng useEffect truyền vào 1 mảng rỗng
 
 useEffect(()=>{}, [depen]);
++ sử dụng useEffect truyền vào 1 mảng chứa các dependency
+(sự phụ thuộc)
++ Hàm callback sẽ được gọi lại mỗi khi dependency thay đổi
 
 + ví dụ: 
 
@@ -59,6 +62,7 @@ import React, { useState } from 'react';
 
 function View() {
   const [name, setName] = useState("");
+   const [type, setType] = useState("posts");
 
   // Mỗi lần gõ vào input component 
   // sẽ (mounted) re render lại và
@@ -74,27 +78,59 @@ function View() {
       console.log("Mounted!!!");
   }, []);
 
+   useEffect(() => {
+        //api sẽ được gọi mỗi khi component mount
+        // và mỗi lần biến type sẽ thay đổi
+        // api sẽ được gọi trong trg hợp này
+        // biến type đã đc truyền vào là dependency
+        //api sẽ mặc định gọi posts vì biến type
+        //có giá trị mặc định là posts
+        //khi type thay đổi component sẽ re render ra
+        //giá trị thay đổi theo biến type
+        fetch("https://jsonplaceholder.typicode.com/" + type)
+        .then(res=> res.json())
+        .then(apis=>{
+            setApi(apis);
+        });
+        //trường hợp này change name vẫn sẽ in ra mỗi khi
+        //component mount tuy nhiên khi 1 biến khác không
+        //phải dependency là biến name mà thay đổi thì
+        //component sẽ re render nhưng change name không được
+        //in ra còn nếu biến name thay đổi thì change name
+        //sẽ được in ra ví dụ:
+        // gõ vào input name 10 lần thì change name sẽ in ra 10 lần
+        console.log("change name");
+
+  }, [type]);
+
   //trường hợp này Mounted vẫn sẽ in ra mỗi khi
-    //component re render nó sẽ được gọi
-    // trước khối lệnh return
-    // Tuy nhiên nếu khối lệnh gọi trc này lỗi
-    // điều đó sẽ làm lỗi ứng dụng
-    //đây là 1 ví dụ:
-    console.log(a); 
-    let a = 1;
-    console.log("Mounted");
+  //component re render nó sẽ được gọi
+  // trước khối lệnh return
+  // Tuy nhiên nếu khối lệnh gọi trc này lỗi
+  // điều đó sẽ làm lỗi ứng dụng
+  //đây là 1 ví dụ:
+  console.log(a); 
+  let a = 1;
+  console.log("Mounted");
 
   return (
     <div>
+        {tabs.map(tab=>
+              <button style={type === tab ? {
+                  background: "#333",
+                  color: 'white'
+                  } : {}} onClick={()=>{
+                      setType(tab);
+                  }} key={tab}>
+                  {tab}
+              </button>
+        )}
         {/*Khối lệnh thực thi này sẽ thực thi trước useEffect*/}
         {console.log(name)}
        <input value={title} onChange={e => setName(e.target.value)}/>
     </div>
   );
 }
-
-
-
 
 ```
 
