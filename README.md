@@ -1,3 +1,33 @@
+# KNOWLEDGE RESTFUL API 
+
+### Life cycle restful api (Vòng đời của restful api)
+```javascript
+
+- Khởi tạo (Initialization):
++ Trong giai đoạn này, server khởi động và chuẩn bị các tài nguyên cần thiết, 
+bao gồm kết nối tới cơ sở dữ liệu, thiết lập các middleware, 
+và các tài nguyên khác cần thiết cho hoạt động của API.
+
+- Xử lý Yêu cầu (Request Processing):
++ Khi một yêu cầu được gửi đến API, server nhận và xử lý yêu cầu đó. 
+Trong quá trình này, các middleware có thể được áp dụng để thực hiện xác thực, 
+phân quyền, kiểm tra lỗi, và các chức năng khác ...
+
+- Xử lý Logic Kinh doanh (Business Logic Processing):
+Sau khi yêu cầu được xác thực và xác định là hợp lệ, 
+server sẽ thực hiện logic theo yêu cầu trong ứng dụng
+
+- Trả về Phản hồi (Response Return):
+Khi xử lý logic xong, server sẽ trả về phản hồi, dữ liệu cho client. 
+
+- Kết thúc (Termination):
++ Sau khi trả về phản hồi server hoàn thành quá trình xử lý 
+yêu cầu và chờ đợi yêu cầu tiếp theo từ client.
+
+```
+
+
+
 # KNOWLEDGE HOOKS IN REACT JS
 
 ### useState hook
