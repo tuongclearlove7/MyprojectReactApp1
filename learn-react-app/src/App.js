@@ -26,7 +26,13 @@ function App() {
             </Routes>
             <br/>
             <div>
-                <footer><h3></h3></footer>
+                <footer>
+                    <h3>
+                        <a href="https://learn-react-js-app7.vercel.app/">
+                            https://learn-react-js-app7.vercel.app/
+                        </a>
+                    </h3>
+                </footer>
             </div>
         </div>
 
