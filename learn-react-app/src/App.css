@@ -7,11 +7,24 @@
   pointer-events: none;
 }
 
+.avatar{
+
+  border-radius: 50%;
+  width: 200px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .avatar {
+    animation: App-logo-spin infinite 10s linear;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
 
 .App-header {
   background-color: #282c34;

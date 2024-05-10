@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 
 const WaitingRoom = () => {
 
     const [message, setMessage] = useState("BẤM NÚT BẮT ĐẦU ĐỂ THAM GIA SẢNH CHỜ");
     const [textStartBtn, setTextStartBtn] = useState("BẮT ĐẦU CHỜ");
     const [show, setShow] = useState(false);
+    const navigate = useNavigate();
 
     const getUserId = () => {
         return "userId";
@@ -60,18 +62,20 @@ const WaitingRoom = () => {
             // Lưu thời gian bắt đầu vào localStorage
             localStorage.setItem(getUserId(), Date.now());
         }
+        navigate("/waiting-room");
         window.location.reload();
     };
 
     const handleCancelTime = () => {
         // Xóa thời gian bắt đầu từ localStorage
         localStorage.removeItem(getUserId());
+        navigate("/");
         window.location.reload();
     };
 
     return (
         <div>
-            <h1>PHÒNG CHỜ</h1>
+            <h1>{show ? "BẠN ĐANG TRONG PHÒNG CHỜ" : "THAM GIA PHÒNG CHỜ NGAY"}</h1>
             <h2>Waiting room feature</h2>
             <h1 style={{color:"red"}} id="message">{message}</h1>
             <div style={{paddingTop:"20px"}}>
