@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 const WaitingRoom = () => {
 
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState("BẤM NÚT BẮT ĐẦU ĐỂ THAM GIA SẢNH CHỜ");
     const [textStartBtn, setTextStartBtn] = useState("BẮT ĐẦU CHỜ");
     const [show, setShow] = useState(false);
 
@@ -34,7 +34,8 @@ const WaitingRoom = () => {
                     clearInterval(timerInterval);
                     localStorage.removeItem(getUserId()); // Xóa thời gian bắt đầu khỏi localStorage
                     setMessage("Thời gian chờ đợi của bạn đã hết!");
-                    await new Promise(resolve => setTimeout(resolve, 2500));
+                    setShow(false);
+                    await new Promise(resolve => setTimeout(resolve, 3000));
                     window.location.reload();
                 } else {
                     const hours = Math.floor(remainingTime / 3600);
@@ -47,8 +48,6 @@ const WaitingRoom = () => {
 
             // Xóa bộ đếm khi unmount
             return () => clearInterval(timerInterval);
-        } else {
-            setMessage("BẤM NÚT BẮT ĐẦU ĐỂ THAM GIA SẢNH CHỜ");
         }
     }, [getUserId()]); // useEffect sẽ chạy lại khi userId thay đổi
 
