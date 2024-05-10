@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
+
 function View() {
 
     //giá trị mặc định của biến name sẽ là Tuong
@@ -50,6 +51,11 @@ function View() {
         console.log("change name");
 
     }, [type]);
+
+    useEffect(() => {
+        //change name sẽ được in ra khi có hành động trên input name
+        console.log("change name: ",name);
+    }, [name]);
 
   return (
       <div>
