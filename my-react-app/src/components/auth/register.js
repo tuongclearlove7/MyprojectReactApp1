@@ -54,7 +54,7 @@ function Register(props) {
         try {
 
             setLoadingRegister(true)
-            const url = `${process.env.REACT_APP_API_LOCALHOST}auth-api/register/store`;
+            const url = `${process.env.REACT_APP_API_LOCALHOST}/auth-api/register/store`;
             const {data: res} = await axios.post(url, data, {
                 headers: {
                     [auth_name]: `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
