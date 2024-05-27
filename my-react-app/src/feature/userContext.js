@@ -6,7 +6,7 @@ import {auth_name} from "../model/secrectName";
 import axios from "axios";
 import io from "socket.io-client";
 
-const socket = io.connect(process.env.REACT_APP_API_LOCALHOST, {
+const socket = io.connect(process.env.REACT_APP_API_HOSTNAME, { //process.env.REACT_APP_API_LOCALHOST
     extraHeaders: {
         [auth_name] : `${process.env.REACT_APP_AUTH_METHOD} ${process.env.REACT_APP_ACCESS_KEY}`,
     },

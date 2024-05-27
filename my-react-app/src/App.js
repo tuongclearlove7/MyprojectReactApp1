@@ -33,7 +33,7 @@ import Weather from "./components/weather/weather";
 
 function App() {
 
-    const url = `${process.env.REACT_APP_API_LOCALHOST}auth-api/account`;
+    const url = `${process.env.REACT_APP_API_HOSTNAME}auth-api/account`;//process.env.REACT_APP_API_LOCALHOST
     const authorWebName = "CLEARLOVE7";
     const [showChat, setShowChat] = useState(false);
     const [showHeader, setShowHeader] = useState(false);
