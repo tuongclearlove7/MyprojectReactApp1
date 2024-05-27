@@ -23,7 +23,7 @@ function Login(props) {
     const {OnLocalStorage, setTitlePage} = useContext(UserContext);
     const {login, HandleLoading} = useContext(UserContext);
     const hostname = process.env.REACT_APP_API_HOSTNAME;//process.env.REACT_APP_API_LOCALHOST
-    const url = `${hostname}auth-api/login`;
+    const url = `${hostname}/auth-api/login`;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [socket, setSocket] = useState(null);
