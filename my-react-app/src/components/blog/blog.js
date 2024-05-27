@@ -10,7 +10,7 @@ function Blog(props){
     const bannerImg = "https://www.sevenstarwebsolutions.com/wp-content/uploads/2017/12/reactbanner.jpg";
     const author = "TuongClearlove7.";
     const title = ``;
-    const hostname = `${process.env.REACT_APP_API_HOSTNAME}blog-api`;
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}/blog-api`;
     const { RedirectAccount, setTitlePage, FetchAPI} = useContext(UserContext);
 
     useEffect(() => {

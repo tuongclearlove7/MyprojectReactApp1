@@ -9,7 +9,7 @@ import {UserContext} from "../../feature/userContext";
 function CompanyItem(props) {
 
     const [companys, setCompanys] = useState([]);
-    const hostname = `${process.env.REACT_APP_API_HOSTNAME}company-api`;
+    const hostname = `${process.env.REACT_APP_API_HOSTNAME}/company-api`;
     const {FetchAPI} = useContext(UserContext);
 
     useEffect(() => {
