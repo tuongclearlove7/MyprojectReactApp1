@@ -11,7 +11,7 @@ function StatusLogin(props){
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const {GetStatusLogin , logout, ExpiredLogin} = useContext(UserContext);
-    const url = `${process.env.REACT_APP_API_HOSTNAME}/auth-api/account`;//process.env.REACT_APP_API_LOCALHOST
+    const url = `${process.env.REACT_APP_API_HOSTNAME}/auth-api/account`;
 
     useEffect(() => {
 
